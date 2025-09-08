@@ -1,21 +1,19 @@
 from pydantic import BaseModel, EmailStr
 from uuid import UUID
 
+
 class UserResponse(BaseModel):
     id: UUID
     first_name: str
     last_name: str
-    email: str    
+    email: str
 
     class Config:
         from_attribites = True
-    
-    
 
 
 class UserCreate(UserResponse):
     password: str
-
 
 
 class RegisterUserRequest(BaseModel):
@@ -24,10 +22,12 @@ class RegisterUserRequest(BaseModel):
     last_name: str
     password: str
 
+
 class Token(BaseModel):
     access_token: str
     token_type: str
-    
+
+
 class TokenData(BaseModel):
     user_id: str | None = None
 
