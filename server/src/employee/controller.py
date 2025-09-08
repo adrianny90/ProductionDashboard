@@ -4,7 +4,6 @@ from ..database import entities
 from fastapi import HTTPException
 from . import schema
 from passlib.context import CryptContext
-import jwt
 
 
 def get_user_by_id(db: Session, user_id: UUID):

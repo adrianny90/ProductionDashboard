@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, MetaData
 import os
 from dotenv import load_dotenv
-from sqlalchemy.orm import sessionmaker, Session, declarative_base
+from sqlalchemy.orm import sessionmaker, Session
 from typing import Annotated
 from fastapi import Depends
 from .entities import Base
