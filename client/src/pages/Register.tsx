@@ -1,6 +1,8 @@
 import { useFormik } from "formik";
 import type { FormikHelpers } from "formik";
 import { registerSchema } from "../schemas/form";
+import { signUp } from "../hooks/auth";
+
 interface Values {
   firstName: string;
   lastName: string;
@@ -33,6 +35,7 @@ const Register = () => {
       await new Promise<void>((resolve) => {
         setTimeout(resolve, 1000);
       });
+      await signUp(values);
       actions.resetForm();
     },
   });

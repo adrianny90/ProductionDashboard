@@ -22,6 +22,7 @@ def add_user(db: Session, user: schema.UserCreate) -> str:
             .filter(entities.Employee.email == user.email)
             .first()
         )
+        print(user)
         if db_user:
             raise HTTPException(
                 status_code=401, detail="User with such email already exists"
@@ -29,8 +30,8 @@ def add_user(db: Session, user: schema.UserCreate) -> str:
         create_user = entities.Employee(
             id=uuid4(),
             email=user.email,
-            first_name=user.first_name,
-            last_name=user.last_name,
+            firstName=user.firstName,
+            lastName=user.lastName,
             password_hash=get_password_hash(user.password),
         )
         db.add(create_user)
