@@ -4,8 +4,8 @@ from uuid import UUID
 
 class UserResponse(BaseModel):
     id: UUID
-    first_name: str
-    last_name: str
+    firstName: str
+    lastName: str
     email: str
 
     class Config:
@@ -14,12 +14,13 @@ class UserResponse(BaseModel):
 
 class UserCreate(UserResponse):
     password: str
+    confirmPassword: str
 
 
 class RegisterUserRequest(BaseModel):
     email: EmailStr
-    first_name: str
-    last_name: str
+    firstName: str
+    lastName: str
     password: str
 
 
