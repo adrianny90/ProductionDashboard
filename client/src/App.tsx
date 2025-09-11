@@ -4,7 +4,6 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Charts from "./pages/Charts";
-import User from "./pages/User";
 import Calendar from "./pages/Calendar";
 
 function App() {
@@ -15,8 +14,8 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/signin" element={<Login />} />
           <Route path="/signup" element={<Register />} />
-          <Route path="/charts" element={<Charts />} />
-          <Route path="/user" element={<User />} />
+          <Route path="/charts/:chartType" element={<Charts />} />
+          {/* <Route path="/user" element={<User />} /> */}
           <Route path="/calendar" element={<Calendar />} />
         </Route>
       </Routes>

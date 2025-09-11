@@ -1,5 +1,11 @@
+import ChartType from "./ChartType";
+
 const Charts = () => {
-  return <div>here we have charts</div>;
+  return (
+    <>
+      <ChartType />
+    </>
+  );
 };
 
 export default Charts;
