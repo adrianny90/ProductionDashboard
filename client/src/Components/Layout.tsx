@@ -4,32 +4,33 @@ import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 
 const Layout = () => {
   return (
-    <nav className="bg bg-gray-200 h-dvh">
-      <div className="app-container">
-        <Navbar />
-        <div className="flex">
-          <div className="m-5">
-            <Sidebar>
-              <Menu>
-                <SubMenu label="Charts">
-                  <MenuItem component={<Link to="/charts" />}>
-                    Pie charts
-                  </MenuItem>
-                  <MenuItem> Line charts </MenuItem>
-                </SubMenu>
-                <MenuItem> Documentation </MenuItem>
-                <MenuItem component={<Link to="/calendar" />}>
-                  Calendar
+    <div className="app-container">
+      <Navbar />
+      <div className="flex">
+        <div className="m-5">
+          <Sidebar>
+            <Menu>
+              <SubMenu label="Charts">
+                <MenuItem component={<Link to="/charts/pie" />}>
+                  Pie charts
                 </MenuItem>
-              </Menu>
-            </Sidebar>
-          </div>
-          <main className="m-10">
-            <Outlet />
-          </main>
+                <MenuItem component={<Link to="/charts/line" />}>
+                  Line charts
+                </MenuItem>
+                <MenuItem component={<Link to="/charts/bar" />}>
+                  Bar charts
+                </MenuItem>
+              </SubMenu>
+              <MenuItem> Documentation </MenuItem>
+              <MenuItem component={<Link to="/calendar" />}>Calendar</MenuItem>
+            </Menu>
+          </Sidebar>
         </div>
+        <main className="m-10">
+          <Outlet />
+        </main>
       </div>
-    </nav>
+    </div>
   );
 };
 

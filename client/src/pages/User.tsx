@@ -7,8 +7,15 @@ const User = () => {
       <Sidebar>
         <Menu>
           <SubMenu label="Charts">
-            <MenuItem component={<Link to="/charts" />}> Pie charts </MenuItem>
-            <MenuItem> Line charts </MenuItem>
+            <MenuItem>
+              <Link to="/charts/pie">Pie chart</Link>
+            </MenuItem>
+            <MenuItem>
+              <Link to="/charts/line">Line chart</Link>
+            </MenuItem>
+            <MenuItem>
+              <Link to="/charts/bar">Bar chart</Link>
+            </MenuItem>
           </SubMenu>
           <MenuItem> Documentation </MenuItem>
           <MenuItem> Calendar </MenuItem>
