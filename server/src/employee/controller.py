@@ -4,6 +4,10 @@ from ..database import entities
 from fastapi import HTTPException
 from . import schema
 from passlib.context import CryptContext
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def get_user_by_id(db: Session, user_id: UUID):
@@ -15,17 +19,19 @@ def get_user_by_id(db: Session, user_id: UUID):
     return db_user
 
 
-def add_user(db: Session, user: schema.UserCreate) -> str:
+def add_user(db: Session, user: schema.RegisterUserRequest) -> str:
     try:
         db_user = (
             db.query(entities.Employee)
             .filter(entities.Employee.email == user.email)
             .first()
         )
-        print(user)
+        print(db_user)
         if db_user:
+            error_message = f"User with such email already exists"
+            logger.error(error_message)
             raise HTTPException(
-                status_code=401, detail="User with such email already exists"
+                status_code=401, detail=error_message
             )
         create_user = entities.Employee(
             id=uuid4(),
@@ -39,9 +45,12 @@ def add_user(db: Session, user: schema.UserCreate) -> str:
         db.refresh(create_user)
         return f"User with email {create_user.email} is created"
     except Exception as e:
+        error_message = f"error while creating an user with error: {str(e)}"
+        logger.error(error_message)
         raise HTTPException(
-            status_code=500, detail=f"error while creating an user with error: {str(e)}"
+            status_code=500, detail=error_message
         )
+        
 
 
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
