@@ -16,3 +16,8 @@ async def get_user_by_id(user_id: UUID, db: DbSession):
 @router_user.post("/signup", response_model=str)
 async def add_user(db: DbSession, user: schema.RegisterUserRequest):
     return controller.add_user(db, user)
+
+
+@router_user.post("/signin", response_model=str)
+async def signin_user(db: DbSession, user: schema.CheckUserRequest):
+    return controller.signin_user(db, user)
