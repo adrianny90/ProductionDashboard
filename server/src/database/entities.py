@@ -17,4 +17,4 @@ class Employee(Base):
     password_hash = Column(String)
 
     def __repr__(self):
-        return f"<User(email={self.email}, first_name={self.first_name}, last_name={self.last_name})>"
+        return f"<User(email={self.email}, first_name={self.firstName}, last_name={self.lastName})>"

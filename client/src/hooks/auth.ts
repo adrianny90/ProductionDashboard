@@ -13,8 +13,8 @@ export const signUp = async (formData: FormData) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData),
   });
-  console.log(formData);
-
+  console.log(formData, "formdata");
+  console.log("Response", res);
   if (!res.ok) {
     const errorData = await res.json();
     throw new Error(errorData.error || "An error occurred while signing up");

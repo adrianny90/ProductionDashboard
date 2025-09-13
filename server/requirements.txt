@@ -6,8 +6,8 @@ pytest
 black 
 flake8
 dotenv
-psycopg2
 pydantic[email]
 passlib
 jwt
 bcrypt==3.2.2
+psycopg2-binary
