@@ -28,3 +28,10 @@ jobs:
         #  && flake8 .
       - name: Test
         run: cd server && pytest
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
