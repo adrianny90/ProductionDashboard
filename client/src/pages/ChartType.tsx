@@ -168,7 +168,7 @@ const ChartType = () => {
             />
             <Line
               type="monotone"
-              dataKey="huminidity"
+              dataKey="humidity"
               stroke="#82ca9d"
               activeDot={{ r: 8 }}
             />
