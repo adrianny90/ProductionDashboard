@@ -23,9 +23,11 @@ class RegisterUserRequest(BaseModel):
     lastName: str
     password: str
 
+
 class CheckUserRequest(BaseModel):
-    email: EmailStr  
+    email: EmailStr
     password: str
+
 
 class Token(BaseModel):
     access_token: str

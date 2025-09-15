@@ -10,6 +10,13 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+def get_user_all(db: Session):
+    db_users = db.query(entities.Employee).all()
+    if not db_users:
+        raise HTTPException(status_code=401, detail="Could not find a user")
+    return db_users
+
+
 def get_user_by_id(db: Session, user_id: UUID):
     db_user = (
         db.query(entities.Employee).filter(entities.Employee.id == user_id).first()
@@ -55,10 +62,6 @@ def get_password_hash(password: str) -> str:
     return bcrypt_context.hash(password)
 
 
-
-
-
-
 def signin_user(db: Session, user: schema.CheckUserRequest) -> str:
     try:
         db_user = (
@@ -66,13 +69,13 @@ def signin_user(db: Session, user: schema.CheckUserRequest) -> str:
             .filter(entities.Employee.email == user.email)
             .first()
         )
-        print("user!!",db_user)
+        print("user!!", db_user)
         if not db_user:
             error_message = f"User with such email doesn't exist"
             logger.error(error_message)
             raise HTTPException(status_code=401, detail=error_message)
-      
-        return ("fine")
+
+        return "fine"
     except Exception as e:
         error_message = f"error while signing in with error: {str(e)}"
         logger.error(error_message)

@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 import uvicorn
 from .employee.routers import router_user
+from .charts.routers import router_charts
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -13,12 +14,13 @@ app.add_middleware(
 )
 
 
-@app.get("/test")
+@app.get("/")
 def test():
     return "message: " " Hello, have a nice day!"
 
 
 app.include_router(router_user)
+app.include_router(router_charts)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
