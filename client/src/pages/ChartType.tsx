@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import {
   BarChart,
@@ -14,6 +15,16 @@ import {
   Pie,
   PieChart,
 } from "recharts";
+import { getData } from "../hooks/useData";
+
+interface ChartData {
+  id: string;
+  temperature: number;
+  humidity: number;
+  pressure: number;
+  time_stamp: string | Date;
+}
+
 const data = [
   {
     name: "Page A",
@@ -66,9 +77,22 @@ const data1 = [
   { name: "Group E", value: 278 },
   { name: "Group F", value: 189 },
 ];
+
 const ChartType = () => {
   const { chartType } = useParams();
-  //   console.log(chartType, "typy chartow");
+  const [fetchData, setFetchData] = useState<ChartData[]>();
+  console.log("typy chartow", chartType);
+  useEffect(() => {
+    const fetchAsyncData = async () => {
+      const data = await getData(chartType);
+      const parsedData = data.map((item: ChartData) => ({
+        ...item,
+        time_stamp: new Date(item.time_stamp),
+      }));
+      setFetchData(parsedData);
+    };
+    fetchAsyncData();
+  }, [chartType]);
   if (chartType === "bar") {
     return (
       <div className="h-dvh w-4xl">
@@ -117,7 +141,7 @@ const ChartType = () => {
           <LineChart
             width={500}
             height={300}
-            data={data}
+            data={fetchData}
             margin={{
               top: 5,
               right: 30,
@@ -126,17 +150,28 @@ const ChartType = () => {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <XAxis dataKey="time_stamp" />
             <YAxis />
             <Tooltip />
             <Legend />
             <Line
               type="monotone"
-              dataKey="pv"
-              stroke="#8884d8"
+              dataKey="temperature"
+              stroke="#8284d8"
               activeDot={{ r: 8 }}
             />
-            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+            <Line
+              type="monotone"
+              dataKey="pressure"
+              stroke="#d4d884"
+              activeDot={{ r: 8 }}
+            />
+            <Line
+              type="monotone"
+              dataKey="huminidity"
+              stroke="#82ca9d"
+              activeDot={{ r: 8 }}
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>

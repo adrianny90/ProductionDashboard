@@ -8,6 +8,11 @@ from . import controller
 router_user = APIRouter(prefix="/users", tags=["Employees"])
 
 
+@router_user.get("/")
+async def get_all(db: DbSession):
+    return controller.get_user_all(db)
+
+
 @router_user.get("/{user_id}", response_model=schema.UserResponse)
 async def get_user_by_id(user_id: UUID, db: DbSession):
     return controller.get_user_by_id(db, user_id)
