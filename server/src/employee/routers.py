@@ -8,7 +8,7 @@ from . import controller
 router_user = APIRouter(prefix="/users", tags=["Employees"])
 
 
-@router_user.get("/")
+@router_user.get("/all")
 async def get_all(db: DbSession):
     return controller.get_user_all(db)
 

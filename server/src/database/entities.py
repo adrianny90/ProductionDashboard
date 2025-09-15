@@ -27,5 +27,5 @@ class LineChart(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     temperature = Column(Float, nullable=False)
     pressure = Column(Float, nullable=False)
-    huminidity = Column(Float, nullable=False)
+    humidity = Column(Float, nullable=False)
     time_stamp = Column(TIMESTAMP, default=datetime.utcnow, index=True, nullable=False)

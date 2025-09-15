@@ -28,6 +28,10 @@ jobs:
       - name: Build
         run: cd client && npm run build
   deploy:
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     needs: build
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
