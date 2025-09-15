@@ -103,7 +103,7 @@ const ChartType = () => {
           <BarChart
             width={500}
             height={300}
-            data={data}
+            data={fetchData}
             margin={{
               top: 5,
               right: 30,
@@ -112,19 +112,24 @@ const ChartType = () => {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <XAxis dataKey="time_stamp" />
             <YAxis />
             <Tooltip />
             <Legend />
             <Bar
-              dataKey="pv"
+              dataKey="steel"
               fill="#8884d8"
               activeBar={<Rectangle fill="pink" stroke="blue" />}
             />
             <Bar
-              dataKey="uv"
+              dataKey="lubricant"
               fill="#82ca9d"
               activeBar={<Rectangle fill="gold" stroke="purple" />}
+            />
+            <Bar
+              dataKey="anti_corrosion_Coating"
+              fill="#d4d884"
+              activeBar={<Rectangle fill="red" stroke="purple" />}
             />
           </BarChart>
         </ResponsiveContainer>

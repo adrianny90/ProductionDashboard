@@ -29,3 +29,13 @@ class LineChart(Base):
     pressure = Column(Float, nullable=False)
     humidity = Column(Float, nullable=False)
     time_stamp = Column(TIMESTAMP, default=datetime.utcnow, index=True, nullable=False)
+
+
+class BarChart(Base):
+    __tablename__ = "bar_chart"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    steel = Column(Float, nullable=False)
+    lubricant = Column(Float, nullable=False)
+    anti_corrosion_Coating = Column(Float, nullable=False)
+    time_stamp = Column(TIMESTAMP, default=datetime.utcnow, index=True, nullable=False)
