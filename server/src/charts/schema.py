@@ -9,3 +9,12 @@ class LineChartCreate(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class BarChartCreate(BaseModel):
+    steel: float
+    lubricant: float
+    anti_corrosion_Coating: float
+
+    class Config:
+        orm_mode = True
