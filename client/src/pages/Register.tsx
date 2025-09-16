@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import type { FormikHelpers } from "formik";
 import { registerSchema } from "../schemas/form";
 import { signUp } from "../hooks/auth";
+import { useState } from "react";
 
 interface Values {
   firstName: string;
@@ -39,6 +40,9 @@ const Register = () => {
       actions.resetForm();
     },
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div className="min-w-2xl  justify-center">
       <div className="min-h-fit min-w-64 bg-gray-100">
@@ -128,13 +132,20 @@ const Register = () => {
               <input
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Type in your password"
                 value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200 focus:border-blue-500"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="mt-2 text-blue-500"
+              >
+                {showPassword ? "Hide Password" : "Show Password"}
+              </button>
               {touched.password && errors.password && (
                 <div className="text-red-500 text-sm mt-1">
                   {errors.password}
@@ -151,7 +162,7 @@ const Register = () => {
               <input
                 id="confirmPassword"
                 name="confirmPassword"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Confirm password"
                 value={values.confirmPassword}
                 onChange={handleChange}
