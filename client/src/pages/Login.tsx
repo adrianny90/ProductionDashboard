@@ -24,8 +24,8 @@ const Login = () => {
     },
     validationSchema: loginSchema,
     onSubmit: async (values: Values, actions: FormikHelpers<Values>) => {
-      console.log(values);
-      console.log(actions);
+      // console.log(values);
+      // console.log(actions);
       await new Promise<void>((resolve) => {
         setTimeout(resolve, 1000);
       });
