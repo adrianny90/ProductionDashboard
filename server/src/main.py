@@ -6,13 +6,15 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
 
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+PORT = int(os.getenv("PORT", 8000))
 
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:8080",
-        "http://localhost:5173",
+        # "http://localhost:8080",
+        # "http://localhost:5173",
         "https://productiondashboardclient.onrender.com",
     ],
     allow_credentials=True,
@@ -30,8 +32,7 @@ app.include_router(router_user)
 app.include_router(router_charts)
 
 
-load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
-PORT = int(os.getenv("PORT", 8000))
+
 
 
 if __name__ == "__main__":
