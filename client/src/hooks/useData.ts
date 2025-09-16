@@ -1,4 +1,4 @@
-const baseURL = "http://localhost:8000/charts";
+const baseURL = `${import.meta.env.VITE_API_BASE_URL}/charts`;
 type ChartType = string | undefined;
 
 export const getData = async (chartType: ChartType) => {

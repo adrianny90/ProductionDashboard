@@ -10,7 +10,11 @@ from dotenv import load_dotenv
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080", "http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:8080",
+        "http://localhost:5173",
+        "https://productiondashboardclient.onrender.com",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -27,7 +31,7 @@ app.include_router(router_charts)
 
 
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
-PORT = int(os.getenv("PORT",8000))
+PORT = int(os.getenv("PORT", 8000))
 
 
 if __name__ == "__main__":

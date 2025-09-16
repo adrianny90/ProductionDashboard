@@ -11,7 +11,7 @@ interface LoginData {
   email: string;
   password: string;
 }
-const baseURL = "http://localhost:8000/users";
+const baseURL = `${import.meta.env.VITE_API_BASE_URL}/users`;
 export const signUp = async (formData: FormData) => {
   const res = await fetch(`${baseURL}/signup`, {
     method: "POST",

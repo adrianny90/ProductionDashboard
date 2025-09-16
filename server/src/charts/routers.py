@@ -21,7 +21,6 @@ async def get_data_line_one(db: DbSession):
     return controller.get_data_linechart_one(db)
 
 
-
 @router_charts.post("/line")
 async def add_data_line(db: DbSession, data: schema.LineChartCreate):
     # Random creation data for charts
@@ -50,7 +49,6 @@ async def add_data_line(db: DbSession, data: schema.LineChartCreate):
     # return controller.post_data_linechart(db, data)
 
 
-
 @router_charts.get("/bar")
 async def get_data_bar(db: DbSession):
     return controller.get_data_barchart(db)
@@ -61,14 +59,14 @@ async def add_data_bar(db: DbSession, data: schema.BarChartCreate):
     # Random creation data for charts
     for _ in range(1, 125):
         fake_data = {
-            'steel': round(random.uniform(30.0, 10.0), 2),
-            'lubricant': round(random.uniform(3.0, 5.0), 2),
-            'anti_corrosion_Coating': round(random.uniform(2.0, 7.0), 2),
+            "steel": round(random.uniform(30.0, 10.0), 2),
+            "lubricant": round(random.uniform(3.0, 5.0), 2),
+            "anti_corrosion_Coating": round(random.uniform(2.0, 7.0), 2),
         }
         print(fake_data)
 
-        try:  
-          
+        try:
+
             controller.post_data_barchart(db, fake_data)
             print(f"Adding {_} time")
             await asyncio.sleep(10)
@@ -78,4 +76,3 @@ async def add_data_bar(db: DbSession, data: schema.BarChartCreate):
                 status_code=500, detail=f"Something wrong in loop with error {str(e)}"
             )
     return f"Data added successfully"
-    
