@@ -26,9 +26,9 @@ async def add_data_line(db: DbSession, data: schema.LineChartCreate):
     # Random creation data for charts
     for _ in range(1, 125):
         fake_data = {
-            "temperature": round(random.uniform(40.0, 100.0), 2),
-            "humidity": round(random.uniform(30.0, 90.0), 2),
-            "pressure": round(random.uniform(2.0, 7.0), 2),
+            "temperature": round(random.uniform(40.0, 65.0), 2),
+            "humidity": round(random.uniform(55.0, 85.0), 2),
+            "pressure": round(random.uniform(12.0, 18.0), 2),
         }
 
         try:
@@ -37,7 +37,7 @@ async def add_data_line(db: DbSession, data: schema.LineChartCreate):
                 humidity=fake_data["humidity"],
                 pressure=fake_data["pressure"],
             )
-            print(f"Created {_} rekord")
+            print(f"Created {_} rekord line")
             controller.post_data_linechart(db, db_line_chart)
             await asyncio.sleep(10)
 
@@ -68,7 +68,7 @@ async def add_data_bar(db: DbSession, data: schema.BarChartCreate):
         try:
 
             controller.post_data_barchart(db, fake_data)
-            print(f"Adding {_} time")
+            print(f"Adding {_} time bar")
             await asyncio.sleep(10)
 
         except Exception as e:
@@ -76,3 +76,16 @@ async def add_data_bar(db: DbSession, data: schema.BarChartCreate):
                 status_code=500, detail=f"Something wrong in loop with error {str(e)}"
             )
     return f"Data added successfully"
+
+
+bar_data = [
+  { "name": "CO2 Emissions (t)", "value": 10 },
+  { "name": "Energy Consumption (MWh)", "value": 14 },
+  { "name": "Solid Waste (t)", "value": 16 },
+  { "name": "Renewable Energy Usage (%)", "value": 21 },
+  { "name": "Water Recycling (m³)", "value": 39 },
+]
+
+@router_charts.get("/pie")
+async def get_data_pie():
+    return bar_data

@@ -1,10 +1,10 @@
-import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import { Link } from "react-router";
+// import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+// import { Link } from "react-router";
 
 const User = () => {
   return (
     <div>
-      <Sidebar>
+      {/* <Sidebar>
         <Menu>
           <SubMenu label="Charts">
             <MenuItem>
@@ -20,7 +20,7 @@ const User = () => {
           <MenuItem> Documentation </MenuItem>
           <MenuItem> Calendar </MenuItem>
         </Menu>
-      </Sidebar>
+      </Sidebar> */}
     </div>
   );
 };

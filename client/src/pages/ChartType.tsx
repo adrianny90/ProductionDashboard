@@ -25,14 +25,21 @@ interface ChartData {
   time_stamp: string | Date;
 }
 
-const data1 = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 300 },
-  { name: "Group D", value: 200 },
-  { name: "Group E", value: 278 },
-  { name: "Group F", value: 189 },
-];
+interface ParsedChartData {
+  time_stamp: Date;
+  id: string;
+  temperature: number;
+  humidity: number;
+  pressure: number;
+}
+
+// const data1 = [
+//   { name: "CO2 Emissions (t)", value: 10 },
+//   { name: "Energy Consumption (MWh)", value: 14 },
+//   { name: "Solid Waste (t)", value: 16 },
+//   { name: "Water Usage (m³)", value: 21 },
+//   { name: "NOx Emissions (kg)", value: 39 },
+// ];
 
 const ChartType = () => {
   const { chartType } = useParams();
@@ -41,10 +48,19 @@ const ChartType = () => {
   useEffect(() => {
     const fetchAsyncData = async () => {
       const data = await getData(chartType);
-      const parsedData = data.map((item: ChartData) => ({
-        ...item,
-        time_stamp: new Date(item.time_stamp),
-      }));
+      const parsedData = data
+        .map(
+          (item: ChartData) =>
+            ({
+              ...item,
+              time_stamp: new Date(item.time_stamp),
+            } as ParsedChartData)
+        )
+        .sort(
+          (a: ParsedChartData, b: ParsedChartData) =>
+            a.time_stamp.getTime() - b.time_stamp.getTime()
+        )
+        .slice(-25);
       setFetchData(parsedData);
     };
     fetchAsyncData();
@@ -53,7 +69,7 @@ const ChartType = () => {
     return (
       <div className="h-dvh w-4xl">
         <p className="text-center items-center text-3xl text-gray-700">
-          Bar chart
+          Raw material status
         </p>
         <ResponsiveContainer width="100%" height="50%">
           <BarChart
@@ -96,7 +112,7 @@ const ChartType = () => {
     return (
       <div className="h-dvh w-4xl">
         <p className="text-center items-center text-3xl text-gray-700">
-          Line chart
+          Environmental conditions
         </p>
         <ResponsiveContainer width="100%" height="50%">
           <LineChart
@@ -142,21 +158,21 @@ const ChartType = () => {
     return (
       <div className="h-dvh w-4xl">
         <p className="text-center items-center text-3xl text-gray-700">
-          Pie chart
+          Environmental impact
         </p>
-        <ResponsiveContainer width="90%" height="90%">
+        <ResponsiveContainer width="90%" height="50%">
           <PieChart width={400} height={400}>
             <Pie
               dataKey="value"
-              startAngle={180}
-              endAngle={0}
-              data={data1}
+              isAnimationActive={true}
+              data={fetchData}
               cx="50%"
               cy="50%"
-              outerRadius={80}
+              outerRadius={100}
               fill="#8884d8"
               label
             />
+            <Tooltip />
           </PieChart>
         </ResponsiveContainer>
       </div>
