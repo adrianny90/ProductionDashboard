@@ -25,7 +25,7 @@ app.add_middleware(
 
 @app.get("/")
 def test():
-    return "message: " " Hello, have a nice day!"
+    return {"message: " " Hello, have a nice day!"}
 
 
 app.include_router(router_user)
