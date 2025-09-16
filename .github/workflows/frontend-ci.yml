@@ -5,10 +5,10 @@ on:
     branches: [main]
     paths:
       - "client/**"
-  pull_request:
-    branches: [main]
-    paths:
-      - "client/**"
+  # pull_request:
+  #   branches: [main]
+  #   paths:
+  #     - "client/**"
 
 jobs:
   build:
