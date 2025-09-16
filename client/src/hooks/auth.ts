@@ -11,7 +11,13 @@ interface LoginData {
   email: string;
   password: string;
 }
-const baseURL = `${import.meta.env.VITE_API_BASE_URL}/users`;
+const baseURL = import.meta.env.VITE_API_BASE_URL
+  ? `${import.meta.env.VITE_API_BASE_URL}/users`
+  : "https://productiondashboardserver.onrender.com/users";
+
+console.log("VITE_API_BASE_URL:", import.meta.env.VITE_API_BASE_URL); // Debugowanie
+console.log("Base URL:", baseURL); // Debugowanie
+
 export const signUp = async (formData: FormData) => {
   const res = await fetch(`${baseURL}/signup`, {
     method: "POST",
