@@ -28,13 +28,15 @@ jobs:
       - name: Build
         run: cd client && npm run build
   deploy:
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    needs: build
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      deployments: write
+    needs: [build]
     steps:
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
+      - uses: JorgeLNJunior/render-deploy@v1.4.5
+        with:
+          service_id: ${{ secrets.RENDER_CLIENT_SERVICE_ID }}
+          api_key: ${{ secrets.RENDER_CLIENT_API_KEY }}
+          github_deployment: false
+          deployment_environment: "production" # e.g., production, staging
+          github_token: ${{ secrets.GITHUB_TOKEN }}
