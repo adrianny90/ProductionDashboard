@@ -14,6 +14,7 @@ import {
   Line,
   Pie,
   PieChart,
+  Cell,
 } from "recharts";
 import { getData } from "../hooks/useData";
 
@@ -43,9 +44,12 @@ interface ParsedChartData {
 
 const ChartType = () => {
   const { chartType } = useParams();
-  const [fetchData, setFetchData] = useState<ChartData[]>();
-  console.log("typy chartow", chartType);
+  const [fetchData, setFetchData] = useState<ChartData[] | undefined>(
+    undefined
+  );
+  // console.log("typy chartow", chartType);
   useEffect(() => {
+    setFetchData(undefined);
     const fetchAsyncData = async () => {
       const data = await getData(chartType);
       const parsedData = data
@@ -65,6 +69,14 @@ const ChartType = () => {
     };
     fetchAsyncData();
   }, [chartType]);
+
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8284d8"];
+  // console.log(fetchData, "fetch");
+
+  if (!fetchData) {
+    return <div>Waiting for data...</div>;
+  }
+
   if (chartType === "bar") {
     return (
       <div className="h-dvh w-4xl">
@@ -171,8 +183,16 @@ const ChartType = () => {
               outerRadius={100}
               fill="#8884d8"
               label
-            />
+            >
+              {fetchData.map((_, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
             <Tooltip />
+            <Legend />
           </PieChart>
         </ResponsiveContainer>
       </div>

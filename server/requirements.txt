@@ -12,3 +12,6 @@ jwt
 bcrypt==3.2.2
 psycopg2-binary
 asyncio
+PyJWT
+bcrypt
+python-jose
