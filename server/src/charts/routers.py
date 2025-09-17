@@ -1,17 +1,17 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
 from ..database.core import DbSession
 from . import controller
 from . import schema
 import random
 import asyncio
 from ..database import entities
-from fastapi import HTTPException
+from ..auth.controller import verify_jwt_token
 
 
 router_charts = APIRouter(prefix="/charts", tags=["Charts-data"])
 
 
-@router_charts.get("/line")
+@router_charts.get("/line", dependencies=[Depends(verify_jwt_token)])
 async def get_data_line(db: DbSession):
     return controller.get_data_linechart(db)
 
@@ -49,7 +49,7 @@ async def add_data_line(db: DbSession, data: schema.LineChartCreate):
     # return controller.post_data_linechart(db, data)
 
 
-@router_charts.get("/bar")
+@router_charts.get("/bar",dependencies=[Depends(verify_jwt_token)])
 async def get_data_bar(db: DbSession):
     return controller.get_data_barchart(db)
 
@@ -86,6 +86,6 @@ bar_data = [
   { "name": "Water Recycling (m³)", "value": 39 },
 ]
 
-@router_charts.get("/pie")
+@router_charts.get("/pie",dependencies=[Depends(verify_jwt_token)])
 async def get_data_pie():
     return bar_data

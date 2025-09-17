@@ -23,6 +23,6 @@ async def add_user(db: DbSession, user: schema.RegisterUserRequest):
     return controller.add_user(db, user)
 
 
-@router_user.post("/signin", response_model=str)
+@router_user.post("/signin/token", response_model=dict)
 async def signin_user(db: DbSession, user: schema.CheckUserRequest):
     return controller.signin_user(db, user)

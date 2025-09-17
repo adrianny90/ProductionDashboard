@@ -12,7 +12,7 @@ const Layout = () => {
             <Menu>
               <SubMenu label="Production data on charts">
                 <MenuItem component={<Link to="/charts/pie" />}>
-                  Enviromental impact
+                  Environmental impact
                 </MenuItem>
                 <MenuItem component={<Link to="/charts/line" />}>
                   Environmental factors

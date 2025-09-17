@@ -36,7 +36,7 @@ export const signUp = async (formData: FormData) => {
 };
 
 export const signIn = async (loginData: LoginData) => {
-  const res = await fetch(`${baseURL}/signin`, {
+  const res = await fetch(`${baseURL}/signin/token`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(loginData),
@@ -49,5 +49,8 @@ export const signIn = async (loginData: LoginData) => {
   }
 
   const data = await res.json();
+  localStorage.setItem("token", data.access_token);
+  console.log(data, "data log in");
+
   return data;
 };
