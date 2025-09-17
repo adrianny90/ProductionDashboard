@@ -8,7 +8,10 @@ from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 PORT = int(os.getenv("PORT", 8000))
-ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:8080,https://productiondashboardclient.onrender.com").split(",")
+ALLOWED_ORIGINS = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://localhost:5173,http://localhost:8080,https://productiondashboardclient.onrender.com",
+).split(",")
 
 app = FastAPI()
 app.add_middleware(
@@ -29,18 +32,14 @@ app.add_middleware(
 def test():
     return {"message: " " Hello, have a nice day!"}
 
+
 @app.get("/debug")
 async def debug():
-    return {
-        "allowed_origins": ALLOWED_ORIGINS,
-        "port": os.getenv("PORT", 8000)
-    }
+    return {"allowed_origins": ALLOWED_ORIGINS, "port": os.getenv("PORT", 8000)}
 
 
 app.include_router(router_user)
 app.include_router(router_charts)
-
-
 
 
 print(f"Starting server on port: {PORT}")

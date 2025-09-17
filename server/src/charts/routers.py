@@ -49,7 +49,7 @@ async def add_data_line(db: DbSession, data: schema.LineChartCreate):
     # return controller.post_data_linechart(db, data)
 
 
-@router_charts.get("/bar",dependencies=[Depends(verify_jwt_token)])
+@router_charts.get("/bar", dependencies=[Depends(verify_jwt_token)])
 async def get_data_bar(db: DbSession):
     return controller.get_data_barchart(db)
 
@@ -79,13 +79,14 @@ async def add_data_bar(db: DbSession, data: schema.BarChartCreate):
 
 
 bar_data = [
-  { "name": "CO2 Emissions (t)", "value": 10 },
-  { "name": "Energy Consumption (MWh)", "value": 14 },
-  { "name": "Solid Waste (t)", "value": 16 },
-  { "name": "Renewable Energy Usage (%)", "value": 21 },
-  { "name": "Water Recycling (m³)", "value": 39 },
+    {"name": "CO2 Emissions (t)", "value": 10},
+    {"name": "Energy Consumption (MWh)", "value": 14},
+    {"name": "Solid Waste (t)", "value": 16},
+    {"name": "Renewable Energy Usage (%)", "value": 21},
+    {"name": "Water Recycling (m³)", "value": 39},
 ]
 
-@router_charts.get("/pie",dependencies=[Depends(verify_jwt_token)])
+
+@router_charts.get("/pie", dependencies=[Depends(verify_jwt_token)])
 async def get_data_pie():
     return bar_data
