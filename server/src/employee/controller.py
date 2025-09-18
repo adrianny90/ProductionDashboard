@@ -104,7 +104,8 @@ def signin_user(db: Session, user: schema.CheckUserRequest, response: Response) 
             value=access_token,
             httponly=is_production,
             secure=True,
-            samesite="lax" if is_production else "none",
+            # samesite="lax" if is_production else "none",
+            samesite="none",
             max_age=180,
         )
         # return {"access_token": access_token, "token_type": "bearer"}
