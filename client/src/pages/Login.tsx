@@ -3,12 +3,13 @@ import type { FormikHelpers } from "formik";
 import { loginSchema } from "../schemas/form";
 import { signIn } from "../hooks/auth";
 import { useState } from "react";
-
+import { useNavigate } from "react-router";
 interface Values {
   email: string;
   password: string;
 }
 const Login = () => {
+  const navigate = useNavigate();
   const {
     values,
     handleChange,
@@ -31,6 +32,7 @@ const Login = () => {
       });
       await signIn(values);
       actions.resetForm();
+      navigate("/");
     },
   });
 

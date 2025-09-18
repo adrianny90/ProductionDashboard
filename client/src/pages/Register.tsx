@@ -3,6 +3,7 @@ import type { FormikHelpers } from "formik";
 import { registerSchema } from "../schemas/form";
 import { signUp } from "../hooks/auth";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 interface Values {
   firstName: string;
@@ -13,6 +14,7 @@ interface Values {
 }
 
 const Register = () => {
+  const navigate = useNavigate();
   const {
     values,
     handleChange,
@@ -38,6 +40,7 @@ const Register = () => {
       });
       await signUp(values);
       actions.resetForm();
+      navigate("/signin");
     },
   });
 
