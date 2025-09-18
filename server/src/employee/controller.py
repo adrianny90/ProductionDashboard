@@ -76,8 +76,13 @@ def signin_user(db: Session, user: schema.CheckUserRequest) -> dict:
             error_message = f"User with such email doesn't exist"
             logger.error(error_message)
             raise HTTPException(status_code=401, detail=error_message)
-
-        if not bcrypt_context.verify(user.password, str(db_user.password_hash)):
+        if db_user.password_hash is None:
+            error_message = "User password hash is missing"
+            logger.error(error_message)
+            raise HTTPException(status_code=500, detail=error_message)
+        
+        password_hash = str(db_user.password_hash)
+        if not bcrypt_context.verify(user.password, password_hash):
             error_message = f"Wrong credentials"
             logger.error(error_message)
             raise HTTPException(status_code=401, detail=error_message)
