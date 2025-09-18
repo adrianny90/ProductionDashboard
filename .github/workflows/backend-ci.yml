@@ -38,6 +38,7 @@ jobs:
         with:
           service_id: ${{ secrets.RENDER_SERVER_SERVICE_ID }}
           api_key: ${{ secrets.RENDER_API_KEY }}
+          wait_deploy: true
           github_deployment: false
           deployment_environment: "production" # e.g., production, staging
           github_token: ${{ secrets.GITHUB_TOKEN }}

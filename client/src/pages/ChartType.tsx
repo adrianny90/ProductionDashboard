@@ -17,7 +17,6 @@ import {
   Cell,
 } from "recharts";
 import { getData } from "../hooks/useData";
-import { verifyToken } from "../hooks/auth";
 
 interface ChartData {
   id: string;
@@ -54,11 +53,7 @@ const ChartType = () => {
   useEffect(() => {
     setFetchData(undefined);
     const fetchAsyncData = async () => {
-      const verify = await verifyToken();
-      if (!verify) {
-        navigate("/");
-        throw Error("Verification failed");
-      } else {
+      try {
         const data = await getData(chartType);
         const parsedData = data
           .map(
@@ -75,8 +70,12 @@ const ChartType = () => {
           .slice(-25);
 
         setFetchData(parsedData);
+      } catch (error) {
+        console.error("Error while fetching chart data:", error);
+        navigate("/signin");
       }
     };
+
     fetchAsyncData();
   }, [chartType]);
 
