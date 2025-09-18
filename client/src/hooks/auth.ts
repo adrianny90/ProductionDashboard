@@ -36,7 +36,7 @@ export const signUp = async (formData: FormData) => {
 };
 
 export const signIn = async (loginData: LoginData) => {
-  const res = await fetch(`${baseURL}/signin/token`, {
+  const res = await fetch(`${baseURL}/signin`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(loginData),
@@ -53,4 +53,23 @@ export const signIn = async (loginData: LoginData) => {
   console.log(data, "data log in");
 
   return data;
+};
+
+export const verifyToken = async () => {
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await fetch(`${baseURL}/verify-token/${token}`, {
+      method: "POST",
+    });
+    if (!response.ok) {
+      throw Error("Token verification failed");
+    }
+    // console.log(response, "res verify");
+    return true;
+  } catch (error) {
+    localStorage.removeItem("token");
+    window.alert("Token validation failed, please login.");
+    console.error(error);
+  }
 };

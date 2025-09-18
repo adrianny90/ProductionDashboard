@@ -14,10 +14,12 @@ load_dotenv(os.path.join(os.path.dirname(__file__), ".." ".env"))
 SECRET_KEY = str(os.getenv("SECRET_KEY"))
 if SECRET_KEY is None:
     raise ValueError("Lack of SECRET_KEY")
+print("env SECRET KEY:", SECRET_KEY)
 
 ALGORITHM = str(os.getenv("ALGORITHM"))
 if ALGORITHM is None:
     raise ValueError("Lack of ALGORITHM")
+print("env ALGORITHM:", ALGORITHM)
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 2
 

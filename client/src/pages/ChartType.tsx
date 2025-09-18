@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import {
   BarChart,
   Bar,
@@ -17,6 +17,7 @@ import {
   Cell,
 } from "recharts";
 import { getData } from "../hooks/useData";
+import { verifyToken } from "../hooks/auth";
 
 interface ChartData {
   id: string;
@@ -47,25 +48,34 @@ const ChartType = () => {
   const [fetchData, setFetchData] = useState<ChartData[] | undefined>(
     undefined
   );
+  const navigate = useNavigate();
+
   // console.log("typy chartow", chartType);
   useEffect(() => {
     setFetchData(undefined);
     const fetchAsyncData = async () => {
-      const data = await getData(chartType);
-      const parsedData = data
-        .map(
-          (item: ChartData) =>
-            ({
-              ...item,
-              time_stamp: new Date(item.time_stamp),
-            } as ParsedChartData)
-        )
-        .sort(
-          (a: ParsedChartData, b: ParsedChartData) =>
-            a.time_stamp.getTime() - b.time_stamp.getTime()
-        )
-        .slice(-25);
-      setFetchData(parsedData);
+      const verify = await verifyToken();
+      if (!verify) {
+        navigate("/");
+        throw Error("Verification failed");
+      } else {
+        const data = await getData(chartType);
+        const parsedData = data
+          .map(
+            (item: ChartData) =>
+              ({
+                ...item,
+                time_stamp: new Date(item.time_stamp),
+              } as ParsedChartData)
+          )
+          .sort(
+            (a: ParsedChartData, b: ParsedChartData) =>
+              a.time_stamp.getTime() - b.time_stamp.getTime()
+          )
+          .slice(-25);
+
+        setFetchData(parsedData);
+      }
     };
     fetchAsyncData();
   }, [chartType]);

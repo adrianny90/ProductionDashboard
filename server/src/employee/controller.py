@@ -76,7 +76,13 @@ def signin_user(db: Session, user: schema.CheckUserRequest) -> dict:
             error_message = f"User with such email doesn't exist"
             logger.error(error_message)
             raise HTTPException(status_code=401, detail=error_message)
-        access_token_expires = timedelta(minutes=2)
+
+        if not bcrypt_context.verify(user.password, str(db_user.password_hash)):
+            error_message = f"Wrong credentials"
+            logger.error(error_message)
+            raise HTTPException(status_code=401, detail=error_message)
+
+        # access_token_expires = timedelta(minutes=2)
         access_token = create_access_token(data={"sub": str(db_user.id)})
 
         return {"access_token": access_token, "token_type": "bearer"}
