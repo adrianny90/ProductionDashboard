@@ -4,50 +4,95 @@ import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 
 const Layout = () => {
   return (
-    <div className="app-container">
+    <>
       <Navbar />
-      <div className="flex">
-        <div className="m-5">
-          <Sidebar>
-            <Menu>
-              <SubMenu label="Production data on charts">
-                <MenuItem component={<Link to="/charts/pie" />}>
+      <div className="flex flex-col md:flex-row min-h-[calc(100vh-4rem)] gap-4 mx-4 sm:mx-6 md:mx-8 lg:mx-10">
+        {/* Sidebar */}
+        <div className="w-full md:w-64 bg-white shadow-lg">
+          <Sidebar
+            className="bg-white"
+            backgroundColor="#ffffff"
+            width="100%"
+            rootStyles={{
+              minHeight: "100%",
+            }}
+          >
+            <Menu
+              menuItemStyles={{
+                button: {
+                  [`&.active`]: {
+                    backgroundColor: "#e5e7eb",
+                    color: "#1f2937",
+                  },
+                  "&:hover": {
+                    backgroundColor: "#f3f4f6",
+                    color: "#1f2937",
+                  },
+                },
+              }}
+            >
+              <SubMenu
+                label="Production data on charts"
+                className="text-gray-700 font-medium"
+              >
+                <MenuItem
+                  component={<Link to="/charts/pie" />}
+                  className="text-gray-600 hover:text-gray-900"
+                >
                   Environmental impact
                 </MenuItem>
-                <MenuItem component={<Link to="/charts/line" />}>
+                <MenuItem
+                  component={<Link to="/charts/line" />}
+                  className="text-gray-600 hover:text-gray-900"
+                >
                   Environmental factors
                 </MenuItem>
-                <MenuItem component={<Link to="/charts/bar" />}>
+                <MenuItem
+                  component={<Link to="/charts/bar" />}
+                  className="text-gray-600 hover:text-gray-900"
+                >
                   Raw material check
                 </MenuItem>
-                <MenuItem component={<Link to="/charts/bar" />}>
-                  Doughnut to visualize a different proportional breakdown
-                  {/* Compare multiple production metrics (e.g., efficiency, quality, speed, cost) across different production lines or shifts in a single radar chart */}
+                <MenuItem
+                  component={<Link to="/charts/doughnut" />}
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Doughnut Chart
                 </MenuItem>
-                <MenuItem component={<Link to="/charts/bar" />}>
-                  Polar Area Chart (for Categorical Impact)
-                  {/* Visualize the environmental impact of different production processes (e.g., energy consumption, waste generation, or water usage by process type). */}
+                <MenuItem
+                  component={<Link to="/charts/polar" />}
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Polar Area Chart
                 </MenuItem>
-                <MenuItem component={<Link to="/charts/bar" />}>
-                  Bubble Chart (for Multi-Dimensional Data)
-                  {/* Analyze production data with three dimensions, such as production volume (x-axis), defect rate (y-axis), and cost (bubble size) for different products or batches
-                   */}
+                <MenuItem
+                  component={<Link to="/charts/bubble" />}
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Bubble Chart
                 </MenuItem>
-                <MenuItem component={<Link to="/charts/bar" />}>
-                  Gauge Chart (Custom Implementation in Chart.js)
-                  {/* Display a single key performance indicator (KPI), such as overall equipment effectiveness (OEE) or production line uptime, as a gauge or speedometer-style chart
-                   */}
+                <MenuItem
+                  component={<Link to="/charts/gauge" />}
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Gauge Chart
                 </MenuItem>
               </SubMenu>
-              <MenuItem component={<Link to="/calendar" />}>Calendar</MenuItem>
+              <MenuItem
+                component={<Link to="/calendar" />}
+                className="text-gray-600 hover:text-gray-900 font-medium"
+              >
+                Calendar
+              </MenuItem>
             </Menu>
           </Sidebar>
         </div>
-        <main className="m-10">
+        {/* Main Content */}
+        <main className="flex-1 bg-white rounded-lg shadow-md p-4 sm:p-6 md:p-8 lg:p-10">
           <Outlet />
         </main>
       </div>
-    </div>
+    </>
   );
 };
 
