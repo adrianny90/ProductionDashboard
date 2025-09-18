@@ -20,27 +20,27 @@ import { getData } from "../hooks/useData";
 
 interface ChartData {
   id: string;
-  temperature: number;
-  humidity: number;
-  pressure: number;
+  temperature?: number;
+  humidity?: number;
+  pressure?: number;
+  steel?: number;
+  lubricant?: number;
+  anti_corrosion_Coating?: number;
   time_stamp: string | Date;
+  value?: number;
 }
 
 interface ParsedChartData {
   time_stamp: Date;
   id: string;
-  temperature: number;
-  humidity: number;
-  pressure: number;
+  temperature?: number;
+  humidity?: number;
+  pressure?: number;
+  steel?: number;
+  lubricant?: number;
+  anti_corrosion_Coating?: number;
+  value?: number;
 }
-
-// const data1 = [
-//   { name: "CO2 Emissions (t)", value: 10 },
-//   { name: "Energy Consumption (MWh)", value: 14 },
-//   { name: "Solid Waste (t)", value: 16 },
-//   { name: "Water Usage (m³)", value: 21 },
-//   { name: "NOx Emissions (kg)", value: 39 },
-// ];
 
 const ChartType = () => {
   const { chartType } = useParams();
@@ -49,7 +49,6 @@ const ChartType = () => {
   );
   const navigate = useNavigate();
 
-  // console.log("typy chartow", chartType);
   useEffect(() => {
     setFetchData(undefined);
     const fetchAsyncData = async () => {
@@ -77,138 +76,157 @@ const ChartType = () => {
     };
 
     fetchAsyncData();
-  }, [chartType]);
+  }, [chartType, navigate]);
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8284d8"];
-  // console.log(fetchData, "fetch");
 
   if (!fetchData) {
-    return <div>Waiting for data...</div>;
+    return (
+      <div className="min-h-screen bg-gray-100 font-sans flex items-center justify-center text-gray-700 text-lg">
+        Waiting for data...
+      </div>
+    );
   }
 
-  if (chartType === "bar") {
-    return (
-      <div className="h-dvh w-4xl">
-        <p className="text-center items-center text-3xl text-gray-700">
-          Raw material status
-        </p>
-        <ResponsiveContainer width="100%" height="50%">
-          <BarChart
-            width={500}
-            height={300}
-            data={fetchData}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="time_stamp" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar
-              dataKey="steel"
-              fill="#8884d8"
-              activeBar={<Rectangle fill="pink" stroke="blue" />}
-            />
-            <Bar
-              dataKey="lubricant"
-              fill="#82ca9d"
-              activeBar={<Rectangle fill="gold" stroke="purple" />}
-            />
-            <Bar
-              dataKey="anti_corrosion_Coating"
-              fill="#d4d884"
-              activeBar={<Rectangle fill="red" stroke="purple" />}
-            />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-    );
-  }
-  if (chartType === "line") {
-    return (
-      <div className="h-dvh w-4xl">
-        <p className="text-center items-center text-3xl text-gray-700">
-          Environmental conditions
-        </p>
-        <ResponsiveContainer width="100%" height="50%">
-          <LineChart
-            width={500}
-            height={300}
-            data={fetchData}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="time_stamp" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="temperature"
-              stroke="#8284d8"
-              activeDot={{ r: 8 }}
-            />
-            <Line
-              type="monotone"
-              dataKey="pressure"
-              stroke="#d4d884"
-              activeDot={{ r: 8 }}
-            />
-            <Line
-              type="monotone"
-              dataKey="humidity"
-              stroke="#82ca9d"
-              activeDot={{ r: 8 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-    );
-  }
-  if (chartType === "pie") {
-    return (
-      <div className="h-dvh w-4xl">
-        <p className="text-center items-center text-3xl text-gray-700">
-          Environmental impact
-        </p>
-        <ResponsiveContainer width="90%" height="50%">
-          <PieChart width={400} height={400}>
-            <Pie
-              dataKey="value"
-              isAnimationActive={true}
+  const chartTitles = {
+    bar: "Raw Material Status",
+    line: "Environmental Conditions",
+    pie: "Environmental Impact",
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 font-sans flex items-center justify-center p-4 sm:p-6 md:p-8">
+      <div className="w-full max-w-4xl bg-white rounded-lg shadow-md p-6 sm:p-8">
+        <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
+          {chartTitles[chartType as keyof typeof chartTitles] ||
+            "Unknown Chart"}
+        </h1>
+        {chartType === "bar" && (
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart
               data={fetchData}
-              cx="50%"
-              cy="50%"
-              outerRadius={100}
-              fill="#8884d8"
-              label
+              margin={{
+                top: 20,
+                right: 30,
+                left: 20,
+                bottom: 10,
+              }}
             >
-              {fetchData.map((_, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis
+                dataKey="time_stamp"
+                tickFormatter={(date: Date) => date.toLocaleTimeString()}
+              />
+              <YAxis />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#fff",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: "4px",
+                }}
+              />
+              <Legend />
+              <Bar
+                dataKey="steel"
+                fill="#8884d8"
+                activeBar={<Rectangle fill="#f472b6" stroke="#3b82f6" />}
+              />
+              <Bar
+                dataKey="lubricant"
+                fill="#82ca9d"
+                activeBar={<Rectangle fill="#facc15" stroke="#9333ea" />}
+              />
+              <Bar
+                dataKey="anti_corrosion_Coating"
+                fill="#d4d884"
+                activeBar={<Rectangle fill="#ef4444" stroke="#9333ea" />}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        )}
+        {chartType === "line" && (
+          <ResponsiveContainer width="100%" height={400}>
+            <LineChart
+              data={fetchData}
+              margin={{
+                top: 20,
+                right: 30,
+                left: 20,
+                bottom: 10,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis
+                dataKey="time_stamp"
+                tickFormatter={(date: Date) => date.toLocaleTimeString()}
+              />
+              <YAxis />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#fff",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: "4px",
+                }}
+              />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="temperature"
+                stroke="#8284d8"
+                activeDot={{ r: 8 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="pressure"
+                stroke="#d4d884"
+                activeDot={{ r: 8 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="humidity"
+                stroke="#82ca9d"
+                activeDot={{ r: 8 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        )}
+        {chartType === "pie" && (
+          <ResponsiveContainer width="100%" height={400}>
+            <PieChart>
+              <Pie
+                dataKey="value"
+                isAnimationActive={true}
+                data={fetchData}
+                cx="50%"
+                cy="50%"
+                outerRadius={120}
+                fill="#8884d8"
+                label
+              >
+                {fetchData.map((_, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#fff",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: "4px",
+                }}
+              />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        )}
+        {chartType !== "bar" && chartType !== "line" && chartType !== "pie" && (
+          <div className="text-center text-gray-700 text-lg">Unknown Chart</div>
+        )}
       </div>
-    );
-  } else {
-    return <div> Unknown chart</div>;
-  }
+    </div>
+  );
 };
 
 export default ChartType;
