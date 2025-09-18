@@ -14,12 +14,12 @@ load_dotenv(os.path.join(os.path.dirname(__file__), ".." ".env"))
 SECRET_KEY = str(os.getenv("SECRET_KEY"))
 if SECRET_KEY is None:
     raise ValueError("Lack of SECRET_KEY")
-print("env SECRET KEY:", SECRET_KEY)
+# print("env SECRET KEY:", SECRET_KEY)
 
 ALGORITHM = str(os.getenv("ALGORITHM"))
 if ALGORITHM is None:
     raise ValueError("Lack of ALGORITHM")
-print("env ALGORITHM:", ALGORITHM)
+# print("env ALGORITHM:", ALGORITHM)
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 2
 
@@ -44,16 +44,32 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return encoded_jwt
 
 
-def verify_jwt_token(token: str = Depends(oauth2_scheme)):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED, detail="Wrong token"
-    )
+# def verify_jwt_token(token: str = Depends(oauth2_scheme)):
+#     credentials_exception = HTTPException(
+#         status_code=status.HTTP_401_UNAUTHORIZED, detail="Wrong token"
+#     )
+
+#     try:
+#         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+#         userid: str | None = payload.get("sub")
+#         if userid is None:
+#             raise credentials_exception
+#         return userid
+#     except JWTError:
+#         raise credentials_exception
+
+
+def verify_jwt_token(request: Request):
+    token = request.cookies.get("access_token")
+    # print("token",token)
+    if not token:
+        raise HTTPException(status_code=401, detail="Could not get a token")
 
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, SECRET_KEY, algorithms=ALGORITHM)
         userid: str | None = payload.get("sub")
         if userid is None:
-            raise credentials_exception
+            raise HTTPException(status_code=401, detail="invalid token")
         return userid
     except JWTError:
-        raise credentials_exception
+        raise HTTPException(status_code=401, detail="Invalid token")

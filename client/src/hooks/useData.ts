@@ -2,10 +2,11 @@ const baseURL = `${import.meta.env.VITE_API_BASE_URL}/charts`;
 type ChartType = string | undefined;
 
 export const getData = async (chartType: ChartType) => {
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
   const res = await fetch(`${baseURL}/${chartType}`, {
     method: "GET",
-    headers: { Authorization: `Bearer ${token}` },
+    // headers: { Authorization: `Bearer ${token}` },
+    credentials: "include",
   });
 
   if (!res.ok) {

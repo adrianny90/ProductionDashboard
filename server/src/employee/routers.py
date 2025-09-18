@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Response
 from uuid import UUID
 from . import schema
 from ..database.core import DbSession
@@ -25,10 +25,10 @@ async def add_user(db: DbSession, user: schema.RegisterUserRequest):
 
 
 @router_user.post("/signin", response_model=dict)
-async def signin_user(db: DbSession, user: schema.CheckUserRequest):
-    return controller.signin_user(db, user)
+async def signin_user(db: DbSession, user: schema.CheckUserRequest, response: Response):
+    return controller.signin_user(db, user, response)
 
 
-@router_user.post("/verify-token/{token}")
-async def verify_token(token: str):
-    return verify_jwt_token(token=token)
+# @router_user.post("/verify-token/{token}")
+# async def verify_token(token: str):
+#     return verify_jwt_token(token=token)
