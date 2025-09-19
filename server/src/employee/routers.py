@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Response
+from fastapi import APIRouter, Response, Depends, Request
 from uuid import UUID
 from . import schema
 from ..database.core import DbSession
@@ -14,6 +14,17 @@ async def get_all(db: DbSession):
     return controller.get_user_all(db)
 
 
+@router_user.get(
+    "/me", dependencies=[Depends(verify_jwt_token)], response_model=schema.MeResponse
+)
+async def check_user_me(db: DbSession):
+    # print("User ID verified:")
+    return {"user_exists": True}
+
+
+#  order with dynamic routes makes difference
+
+
 @router_user.get("/{user_id}", response_model=schema.UserResponse)
 async def get_user_by_id(user_id: UUID, db: DbSession):
     return controller.get_user_by_id(db, user_id)
@@ -24,9 +35,14 @@ async def add_user(db: DbSession, user: schema.RegisterUserRequest):
     return controller.add_user(db, user)
 
 
-@router_user.post("/signin", response_model=dict)
+@router_user.post("/signin", response_model=dict | str)
 async def signin_user(db: DbSession, user: schema.CheckUserRequest, response: Response):
     return controller.signin_user(db, user, response)
+
+
+@router_user.delete("/signout", response_model=dict)
+async def logout_user(response: Response):
+    return controller.loggingout_user(response)
 
 
 # @router_user.post("/verify-token/{token}")

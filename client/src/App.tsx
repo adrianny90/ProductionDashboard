@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Charts from "./pages/Charts";
 import Calendar from "./pages/Calendar";
+import ProtectedLayout from "./Components/ProtectedLayout";
 
 function App() {
   return (
@@ -14,7 +15,9 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/signin" element={<Login />} />
           <Route path="/signup" element={<Register />} />
-          <Route path="/charts/:chartType" element={<Charts />} />
+          <Route element={<ProtectedLayout />}>
+            <Route path="/charts/:chartType" element={<Charts />} />
+          </Route>
           {/* <Route path="/user" element={<User />} /> */}
           <Route path="/calendar" element={<Calendar />} />
         </Route>

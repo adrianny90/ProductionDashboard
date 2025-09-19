@@ -8,13 +8,11 @@ export const getData = async (chartType: ChartType) => {
     // headers: { Authorization: `Bearer ${token}` },
     credentials: "include",
   });
-
   if (!res.ok) {
     const errorData = await res.json();
     throw new Error(errorData.error || "An error occurred while fetching data");
   }
-
   const data = await res.json();
-  console.log("Response", data);
+  // console.log("Response", data);
   return data;
 };

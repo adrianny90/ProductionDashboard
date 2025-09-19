@@ -78,6 +78,7 @@ async def add_data_bar(db: DbSession, data: schema.BarChartCreate):
     return f"Data added successfully"
 
 
+# fake data to serve to frontend
 bar_data = [
     {"name": "CO2 Emissions (t)", "value": 10},
     {"name": "Energy Consumption (MWh)", "value": 14},

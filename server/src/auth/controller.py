@@ -29,8 +29,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def get_password_hash(password: str) -> str:
-    return bcrypt_context.hash(password)
+# def get_password_hash(password: str) -> str:
+#     return bcrypt_context.hash(password)
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
@@ -70,6 +70,7 @@ def verify_jwt_token(request: Request):
         userid: str | None = payload.get("sub")
         if userid is None:
             raise HTTPException(status_code=401, detail="invalid token")
+        # print("userID verify token",userid)
         return userid
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
