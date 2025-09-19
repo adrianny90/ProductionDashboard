@@ -4,13 +4,14 @@ import { loginSchema } from "../schemas/form";
 import { signIn } from "../hooks/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-
+import { useAuth } from "../hooks/useAuth";
 interface Values {
   email: string;
   password: string;
 }
 
 const Login = () => {
+  const { setUser } = useAuth();
   const navigate = useNavigate();
   const {
     values,
@@ -30,7 +31,9 @@ const Login = () => {
       await new Promise<void>((resolve) => {
         setTimeout(resolve, 1000);
       });
-      await signIn(values);
+      const res = await signIn(values);
+      setUser(res.user_id);
+      // console.log("set user", res.user_id);
       actions.resetForm();
       navigate("/");
     },
@@ -107,7 +110,7 @@ const Login = () => {
         <p className="text-center text-sm text-gray-600 mt-4">
           Don't have an account?{" "}
           <a
-            href="/register"
+            href="/signup"
             className="text-blue-500 hover:text-blue-600 font-medium"
           >
             Sign Up

@@ -1,7 +1,7 @@
 from uuid import UUID, uuid4
 from sqlalchemy.orm import Session
 from ..database import entities
-from fastapi import HTTPException, Response
+from fastapi import HTTPException, Response, Request
 from . import schema
 from passlib.context import CryptContext
 import logging
@@ -9,10 +9,28 @@ from datetime import timedelta
 from ..auth.controller import create_access_token
 from dotenv import load_dotenv
 import os
+from fastapi.security import OAuth2PasswordBearer
+
+
+load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
+PYTHON_ENV = os.getenv("PYTHON_ENV")
+if PYTHON_ENV is None:
+    raise ValueError("Lack of PYTHON_ENV")
+is_production = PYTHON_ENV == "production"
+
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+def get_password_hash(password: str) -> str:
+    return bcrypt_context.hash(password)
 
 
 def get_user_all(db: Session):
@@ -60,13 +78,6 @@ def add_user(db: Session, user: schema.RegisterUserRequest) -> str:
         raise HTTPException(status_code=500, detail=error_message)
 
 
-bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
-def get_password_hash(password: str) -> str:
-    return bcrypt_context.hash(password)
-
-
 def signin_user(db: Session, user: schema.CheckUserRequest, response: Response) -> dict:
     try:
         db_user = (
@@ -90,12 +101,6 @@ def signin_user(db: Session, user: schema.CheckUserRequest, response: Response) 
             logger.error(error_message)
             raise HTTPException(status_code=401, detail=error_message)
 
-        load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
-
-        PYTHON_ENV = os.getenv("PYTHON_ENV")
-        if PYTHON_ENV is None:
-            raise ValueError("Lack of PYTHON_ENV")
-
         is_production = PYTHON_ENV == "production"
         # access_token_expires = timedelta(minutes=2)
         access_token = create_access_token(data={"sub": str(db_user.id)})
@@ -109,8 +114,20 @@ def signin_user(db: Session, user: schema.CheckUserRequest, response: Response) 
             max_age=180,
         )
         # return {"access_token": access_token, "token_type": "bearer"}
-        return {"message": "Login successful"}
+        return {"message": "Login successful", "user_id": db_user.id}
     except Exception as e:
         error_message = f"error while signing in with error: {str(e)}"
         logger.error(error_message)
         raise HTTPException(status_code=500, detail=error_message)
+
+
+def loggingout_user(response: Response) -> dict:
+
+    response.delete_cookie(
+        key="access_token",
+        httponly=is_production,
+        secure=True,
+        # samesite="lax" if is_production else "none",
+        samesite="none",
+    )
+    return {"message": "Logout successfuly"}

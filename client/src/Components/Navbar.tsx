@@ -1,6 +1,9 @@
 import { Link } from "react-router";
+import { useAuth } from "../hooks/useAuth";
 
 const Navbar = () => {
+  const { user, logOut } = useAuth();
+
   return (
     <nav className="bg-white shadow-md">
       <div className="container mx-auto px-4 sm:px-6 md:px-8 py-4 flex justify-between items-center">
@@ -18,22 +21,38 @@ const Navbar = () => {
         </div>
         <div>
           <ul className="flex space-x-6 sm:space-x-8">
-            <li>
-              <Link
-                to="/signin"
-                className="text-base sm:text-lg font-medium text-blue-500 hover:text-blue-600 transition-colors duration-200"
-              >
-                Login
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/signup"
-                className="text-base sm:text-lg font-medium text-blue-500 hover:text-blue-600 transition-colors duration-200"
-              >
-                Register
-              </Link>
-            </li>
+            <>
+              {user ? (
+                <li>
+                  <Link
+                    onClick={logOut}
+                    to="/"
+                    className="text-base sm:text-lg font-medium text-blue-500 hover:text-blue-600 transition-colors duration-200"
+                  >
+                    Logout
+                  </Link>
+                </li>
+              ) : (
+                <>
+                  <li>
+                    <Link
+                      to="/signin"
+                      className="text-base sm:text-lg font-medium text-blue-500 hover:text-blue-600 transition-colors duration-200"
+                    >
+                      Login
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/signup"
+                      className="text-base sm:text-lg font-medium text-blue-500 hover:text-blue-600 transition-colors duration-200"
+                    >
+                      Register
+                    </Link>
+                  </li>
+                </>
+              )}
+            </>
           </ul>
         </div>
       </div>

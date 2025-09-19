@@ -1,53 +1,41 @@
-// import { createContext, useEffect, useState, type ReactNode } from "react";
-// import { type Dispatch, type SetStateAction } from "react";
-// import { signOut, me } from "../hooks/auth";
-// // poprawic typescript
-// interface AuthContextType {
-//   user: string | null;
-//   setUser: Dispatch<SetStateAction<String | null>>;
-//   logOut: () => Promise<void>;
-// }
+import { useEffect, useState, type ReactNode } from "react";
+import { AuthContext } from "./AuthContext";
+import { signOut, me } from "../hooks/auth";
 
-// const AuthContext = createContext<AuthContextType>({
-//   user: null,
-//   setUser: () => {},
-//   logOut: async () => {},
-// });
+const AuthContextProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<string | null>(null);
 
-// const AuthContextProvider = ({ children }: { children: ReactNode }) => {
-//   const [user, setUser] = useState<String | null>(null);
-//   console.log("User: ", user);
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const userData = await me();
+        // console.log("userData:", userData);
+        if (userData.user_exists) {
+          setUser("authenticated");
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+    getUser();
+  }, []);
 
-//   useEffect(() => {
-//     const getUser = async () => {
-//       try {
-//         const userData = await me();
-//         setUser(userData);
-//       } catch (error) {
-//         console.log(error);
-//       }
-//     };
+  const logOut = async () => {
+    try {
+      await signOut();
+      setUser(null);
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
 
-//     getUser();
-//   }, []);
+  const values = {
+    user,
+    setUser,
+    logOut,
+  };
 
-//   const logOut = async () => {
-//     try {
-//       await signOut(); //Cookie will be deleted
-//       setUser(null); //User data will be deleted
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
+  return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
+};
 
-//   const values = {
-//     // user,
-//     // setUser,
-//     logOut,
-//   };
-
-//     return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
-
-// };
-
-// export { AuthContextProvider, AuthContext };
+export default AuthContextProvider;
