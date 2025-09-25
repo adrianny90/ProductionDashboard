@@ -36,10 +36,11 @@ interface ParsedChartData {
   temperature?: number;
   humidity?: number;
   pressure?: number;
-  steel?: number;
+  steel: number;
   lubricant?: number;
   anti_corrosion_Coating?: number;
   value?: number;
+  final_product?: number;
 }
 
 const ChartType = () => {
@@ -51,6 +52,8 @@ const ChartType = () => {
 
   useEffect(() => {
     setFetchData(undefined);
+    console.log(chartType, "chartType");
+
     const fetchAsyncData = async () => {
       try {
         const data = await getData(chartType);
@@ -67,8 +70,17 @@ const ChartType = () => {
               a.time_stamp.getTime() - b.time_stamp.getTime()
           )
           .slice(-25);
-
-        setFetchData(parsedData);
+        if (chartType === "mixBar") {
+          const randomFactor = Math.random();
+          const calculatedFactor = 15 * randomFactor;
+          const dataVisualize = parsedData.map((item: ParsedChartData) => ({
+            ...item,
+            final_product: (item.steel * (75 - calculatedFactor)) / 100,
+          }));
+          setFetchData(dataVisualize);
+        } else {
+          setFetchData(parsedData);
+        }
       } catch (error) {
         console.error("Error while fetching chart data:", error);
         navigate("/signin");
@@ -79,6 +91,7 @@ const ChartType = () => {
   }, [chartType, navigate]);
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8284d8"];
+  console.log(fetchData, "data");
 
   if (!fetchData) {
     return (
@@ -92,6 +105,7 @@ const ChartType = () => {
     bar: "Raw Material Status",
     line: "Environmental Conditions",
     pie: "Environmental Impact",
+    mixBar: "Raw Material vs Product",
   };
 
   return (
@@ -220,10 +234,54 @@ const ChartType = () => {
               <Legend />
             </PieChart>
           </ResponsiveContainer>
+        )}{" "}
+        {chartType === "mixBar" && (
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart
+              data={fetchData}
+              margin={{
+                top: 20,
+                right: 30,
+                left: 20,
+                bottom: 10,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis
+                dataKey="time_stamp"
+                tickFormatter={(date: Date) => date.toLocaleTimeString()}
+              />
+              <YAxis />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#fff",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: "4px",
+                }}
+              />
+              <Legend />
+              <Bar
+                dataKey="steel"
+                fill="#f884d8"
+                activeBar={<Rectangle fill="#f472b6" stroke="#3b82f6" />}
+              />
+              <Bar
+                dataKey="final_product"
+                fill="#f2ca9d"
+                activeBar={<Rectangle fill="#facc15" stroke="#9333ea" />}
+                // <Legend onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
+              />
+            </BarChart>
+          </ResponsiveContainer>
         )}
-        {chartType !== "bar" && chartType !== "line" && chartType !== "pie" && (
-          <div className="text-center text-gray-700 text-lg">Unknown Chart</div>
-        )}
+        {chartType !== "bar" &&
+          chartType !== "line" &&
+          chartType !== "pie" &&
+          chartType !== "mixBar" && (
+            <div className="text-center text-gray-700 text-lg">
+              Unknown Chart
+            </div>
+          )}
       </div>
     </div>
   );

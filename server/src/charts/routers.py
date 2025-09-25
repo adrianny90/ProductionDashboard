@@ -91,3 +91,8 @@ bar_data = [
 @router_charts.get("/pie", dependencies=[Depends(verify_jwt_token)])
 async def get_data_pie():
     return bar_data
+
+
+@router_charts.get("/mixBar", dependencies=[Depends(verify_jwt_token)])
+async def get_data_mix_bar(db: DbSession):
+    return controller.get_data_barchart(db)
