@@ -16,6 +16,7 @@ class Employee(Base):
     firstName = Column(String, nullable=False)
     lastName = Column(String, nullable=False)
     password_hash = Column(String)
+    role = Column(String, nullable=False, default="user")
 
     def __repr__(self):
         return f"<User(email={self.email}, first_name={self.firstName}, last_name={self.lastName})>"
