@@ -2,7 +2,13 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 
 const Calendar = () => {
-  const events = [{ title: "Coffee", start: new Date() }];
+  const today = new Date();
+  const events = [
+    { title: "Service", start: today.setDate(today.getDate() - 1) },
+    { title: "Break", start: today.setDate(today.getDate() - 3) },
+    { title: "Plan", start: today.setDate(today.getDate() + 6) },
+    { title: "Upcoming", start: today.setDate(today.getDate() + 2) },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-100 font-sans flex items-center justify-center p-4 sm:p-6 md:p-8">

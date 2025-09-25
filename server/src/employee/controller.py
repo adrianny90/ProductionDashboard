@@ -111,7 +111,7 @@ def signin_user(db: Session, user: schema.CheckUserRequest, response: Response) 
             secure=True,
             # samesite="lax" if is_production else "none",
             samesite="none",
-            max_age=180,
+            max_age=30000,
         )
         # return {"access_token": access_token, "token_type": "bearer"}
         return {"message": "Login successful", "user_id": db_user.id}

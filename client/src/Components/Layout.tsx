@@ -56,12 +56,12 @@ const Layout = () => {
                     Raw material check
                   </MenuItem>
                   <MenuItem
-                    component={<Link to="/charts/doughnut" />}
+                    component={<Link to="/charts/mixBar" />}
                     className="text-gray-600 hover:text-gray-900"
                   >
-                    Doughnut Chart
+                    Raw material vs final product ratio
                   </MenuItem>
-                  <MenuItem
+                  {/* <MenuItem
                     component={<Link to="/charts/polar" />}
                     className="text-gray-600 hover:text-gray-900"
                   >
@@ -78,7 +78,7 @@ const Layout = () => {
                     className="text-gray-600 hover:text-gray-900"
                   >
                     Gauge Chart
-                  </MenuItem>
+                  </MenuItem> */}
                 </SubMenu>
                 <MenuItem
                   component={<Link to="/calendar" />}
