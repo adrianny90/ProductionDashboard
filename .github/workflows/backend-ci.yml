@@ -30,6 +30,7 @@ jobs:
         run: cd server && pytest
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          PYTHON_ENV: ${{ secrets.PYTHON_ENV }}
   deploy:
     runs-on: ubuntu-latest
     permissions:
