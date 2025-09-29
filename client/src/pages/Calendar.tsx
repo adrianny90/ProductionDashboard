@@ -1,44 +1,156 @@
+import React from "react";
+import { formatDate } from "@fullcalendar/core";
+import type {
+  EventApi,
+  DateSelectArg,
+  EventClickArg,
+  EventContentArg,
+} from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import { INITIAL_EVENTS, createEventId } from "../utils/event-utils";
 
-const Calendar = () => {
-  const today = new Date();
-  const events = [
-    { title: "Service", start: today.setDate(today.getDate() - 1) },
-    { title: "Break", start: today.setDate(today.getDate() - 3) },
-    { title: "Plan", start: today.setDate(today.getDate() + 6) },
-    { title: "Upcoming", start: today.setDate(today.getDate() + 2) },
-  ];
+interface DemoAppState {
+  weekendsVisible: boolean;
+  currentEvents: EventApi[];
+}
 
-  return (
-    <div className="min-h-screen bg-gray-100 font-sans flex items-center justify-center p-4 sm:p-6 md:p-8">
-      <div className="w-full max-w-4xl bg-white rounded-lg shadow-md p-6 sm:p-8">
-        <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          Production Calendar
-        </h1>
-        <FullCalendar
-          plugins={[dayGridPlugin]}
-          initialView="dayGridMonth"
-          weekends={true}
-          events={events}
-          height="auto"
-          eventDisplay="block"
-          eventTextColor="#fff"
-          eventBackgroundColor="#3b82f6"
-          eventBorderColor="#2563eb"
-          headerToolbar={{
-            left: "prev,next today",
-            center: "title",
-            right: "dayGridMonth",
-          }}
-          buttonText={{
-            today: "Today",
-            month: "Month",
-          }}
-        />
+export default class DemoApp extends React.Component<
+  Record<string, never>,
+  DemoAppState
+> {
+  state: DemoAppState = {
+    weekendsVisible: true,
+    currentEvents: [],
+  };
+
+  render() {
+    return (
+      <>
+        <div className="flex flex-col md:flex-row min-h-full  ">
+          {this.renderSidebar()}
+
+          <div className="p-3">
+            <FullCalendar
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              headerToolbar={{
+                left: "prev,next today",
+                center: "title",
+                right: "dayGridMonth,timeGridWeek,timeGridDay",
+              }}
+              initialView="dayGridMonth"
+              editable={true}
+              selectable={true}
+              selectMirror={true}
+              dayMaxEvents={true}
+              weekends={this.state.weekendsVisible}
+              initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
+              select={this.handleDateSelect}
+              eventContent={renderEventContent} // custom render function
+              eventClick={this.handleEventClick}
+              eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
+              /* you can update a remote database when these fire:
+            eventAdd={function(){}}
+            eventChange={function(){}}
+            eventRemove={function(){}}
+            */
+            />
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  renderSidebar() {
+    return (
+      <div className="  bg-gray-100 ">
+        <div className="p-2">
+          <h2 className="text text-2xl my-2">Instructions</h2>
+          <ul>
+            <li>Select dates and you will be prompted to create a new event</li>
+            <li>Click an event to delete it</li>
+          </ul>
+        </div>
+        <div className="mx-3">
+          <label>
+            <input
+              type="checkbox"
+              checked={this.state.weekendsVisible}
+              onChange={this.handleWeekendsToggle}
+            ></input>
+            toggle weekends
+          </label>
+        </div>
+        <div className="p-2">
+          <h2>All Events ({this.state.currentEvents.length})</h2>
+          <ul>{this.state.currentEvents.map(renderSidebarEvent)}</ul>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
 
-export default Calendar;
+  handleWeekendsToggle = () => {
+    this.setState({
+      weekendsVisible: !this.state.weekendsVisible,
+    });
+  };
+
+  handleDateSelect = (selectInfo: DateSelectArg) => {
+    const title = prompt("Please enter a new title for your event");
+    const calendarApi = selectInfo.view.calendar;
+
+    calendarApi.unselect(); // clear date selection
+
+    if (title) {
+      calendarApi.addEvent({
+        id: createEventId(),
+        title,
+        start: selectInfo.startStr,
+        end: selectInfo.endStr,
+        allDay: selectInfo.allDay,
+      });
+    }
+  };
+
+  handleEventClick = (clickInfo: EventClickArg) => {
+    if (
+      confirm(
+        `Are you sure you want to delete the event '${clickInfo.event.title}'`
+      )
+    ) {
+      clickInfo.event.remove();
+    }
+  };
+
+  handleEvents = (events: EventApi[]) => {
+    this.setState({
+      currentEvents: events,
+    });
+  };
+}
+
+function renderEventContent(eventContent: EventContentArg) {
+  return (
+    <>
+      <b>{eventContent.timeText}</b>
+      <i>{eventContent.event.title}</i>
+    </>
+  );
+}
+
+function renderSidebarEvent(event: EventApi) {
+  return (
+    <li key={event.id}>
+      <b>
+        {formatDate(event.start!, {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })}
+      </b>
+      <i>{event.title}</i>
+    </li>
+  );
+}

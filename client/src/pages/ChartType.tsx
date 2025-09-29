@@ -52,7 +52,7 @@ const ChartType = () => {
 
   useEffect(() => {
     setFetchData(undefined);
-    console.log(chartType, "chartType");
+    // console.log(chartType, "chartType");
 
     const fetchAsyncData = async () => {
       try {
@@ -91,7 +91,7 @@ const ChartType = () => {
   }, [chartType, navigate]);
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8284d8"];
-  console.log(fetchData, "data");
+  // console.log(fetchData, "data");
 
   if (!fetchData) {
     return (
