@@ -61,24 +61,12 @@ const Layout = () => {
                   >
                     Raw material vs final product ratio
                   </MenuItem>
-                  {/* <MenuItem
-                    component={<Link to="/charts/polar" />}
-                    className="text-gray-600 hover:text-gray-900"
-                  >
-                    Polar Area Chart
-                  </MenuItem>
                   <MenuItem
-                    component={<Link to="/charts/bubble" />}
+                    component={<Link to="/ws" />}
                     className="text-gray-600 hover:text-gray-900"
                   >
-                    Bubble Chart
+                    Real time capacity
                   </MenuItem>
-                  <MenuItem
-                    component={<Link to="/charts/gauge" />}
-                    className="text-gray-600 hover:text-gray-900"
-                  >
-                    Gauge Chart
-                  </MenuItem> */}
                 </SubMenu>
                 <MenuItem
                   component={<Link to="/calendar" />}

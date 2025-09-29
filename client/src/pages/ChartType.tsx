@@ -151,6 +151,7 @@ const ChartType = () => {
                 activeBar={<Rectangle fill="#facc15" stroke="#9333ea" />}
               />
               <Bar
+                name="anti corrosion coating"
                 dataKey="anti_corrosion_Coating"
                 fill="#d4d884"
                 activeBar={<Rectangle fill="#ef4444" stroke="#9333ea" />}
@@ -261,11 +262,13 @@ const ChartType = () => {
               />
               <Legend />
               <Bar
+                name="raw steel in tones"
                 dataKey="steel"
                 fill="#f884d8"
                 activeBar={<Rectangle fill="#f472b6" stroke="#3b82f6" />}
               />
               <Bar
+                name="final product in tones"
                 dataKey="final_product"
                 fill="#f2ca9d"
                 activeBar={<Rectangle fill="#facc15" stroke="#9333ea" />}
