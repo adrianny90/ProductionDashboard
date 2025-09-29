@@ -4,17 +4,19 @@ import { signOut, me } from "../hooks/auth";
 
 const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const getUser = async () => {
       try {
         const userData = await me();
-        // console.log("userData:", userData);
         if (userData.user_exists) {
           setUser("authenticated");
         }
       } catch (error) {
         console.error("Error fetching user:", error);
+      } finally {
+        setLoading(false);
       }
     };
     getUser();
@@ -33,6 +35,7 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     user,
     setUser,
     logOut,
+    loading,
   };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
