@@ -17,3 +17,4 @@ bcrypt
 python-jose
 httpx
 websockets
+mangum

@@ -6,12 +6,13 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
 import random
+from mangum import Mangum
 
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 PORT = int(os.getenv("PORT", 8000))
 ALLOWED_ORIGINS = os.getenv(
     "ALLOWED_ORIGINS",
-    "http://localhost:5173,http://localhost:8080,https://productiondashboardclient.onrender.com",
+    "http://localhost:5173,http://localhost:8080,https://productiondashboardclient.onrender.com,https://d23bkrn8zi2u8g.cloudfront.net",
 ).split(",")
 
 app = FastAPI()
@@ -60,6 +61,7 @@ app.include_router(router_user)
 app.include_router(router_charts)
 
 
-print(f"Starting server on port: {PORT}")
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=PORT)
+# print(f"Starting server on port: {PORT}")
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="0.0.0.0", port=PORT)
+handler = Mangum(app)
