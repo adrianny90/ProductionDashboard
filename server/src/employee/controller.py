@@ -113,8 +113,15 @@ def signin_user(db: Session, user: schema.CheckUserRequest, response: Response) 
             samesite="none",
             max_age=30000,
         )
+        # print("user",db_user)
         # return {"access_token": access_token, "token_type": "bearer"}
-        return {"message": "Login successful", "user_id": db_user.id}
+        return {
+            "message": "Login successful",
+            "userName": db_user.firstName,
+            "userRole": db_user.role,
+            "user_exists": True,
+            "user_id": db_user.id,
+        }
     except Exception as e:
         error_message = f"error while signing in with error: {str(e)}"
         logger.error(error_message)

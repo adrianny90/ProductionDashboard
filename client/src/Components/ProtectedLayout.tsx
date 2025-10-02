@@ -8,7 +8,7 @@ const ProtectedLayout = () => {
     return <div>Loading...</div>;
   }
 
-  return user ? <Outlet /> : <Navigate to="/signin" />;
+  return user.user_exists ? <Outlet /> : <Navigate to="/signin" />;
 };
 
 export default ProtectedLayout;

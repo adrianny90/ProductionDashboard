@@ -1,17 +1,27 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
 import { signOut, me } from "../hooks/auth";
-
+interface User {
+  firstName: string;
+  user_exists: boolean;
+  role: string;
+}
 const AuthContextProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<string | null>(null);
+  const [user, setUser] = useState<User>({
+    firstName: "",
+    user_exists: false,
+    role: "",
+  });
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const getUser = async () => {
       try {
         const userData = await me();
+        // console.log(userData, "userdata");
+
         if (userData.user_exists) {
-          setUser("authenticated");
+          setUser(userData);
         }
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -19,13 +29,14 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         setLoading(false);
       }
     };
+
     getUser();
   }, []);
-
+  // console.log("User", user);
   const logOut = async () => {
     try {
       await signOut();
-      setUser(null);
+      setUser({ firstName: "", user_exists: false, role: "" });
     } catch (error) {
       console.error("Error signing out:", error);
     }

@@ -32,7 +32,11 @@ const Login = () => {
         setTimeout(resolve, 1000);
       });
       const res = await signIn(values);
-      setUser(res.user_id);
+      setUser({
+        firstName: res.userName,
+        user_exists: res.user_exists,
+        role: res.userRole,
+      });
       // console.log("set user", res.user_id);
       actions.resetForm();
       navigate("/");

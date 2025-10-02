@@ -22,16 +22,21 @@ const Navbar = () => {
         <div>
           <ul className="flex space-x-6 sm:space-x-8">
             <>
-              {user ? (
-                <li>
-                  <Link
-                    onClick={logOut}
-                    to="/"
-                    className="text-base sm:text-lg font-medium text-blue-500 hover:text-blue-600 transition-colors duration-200"
-                  >
-                    Logout
-                  </Link>
-                </li>
+              {user.user_exists ? (
+                <>
+                  <li className="text-base sm:text-lg font-medium text-red-500 hover:text-red-600 transition-colors duration-200">
+                    Hi {user.firstName}!
+                  </li>
+                  <li>
+                    <Link
+                      onClick={logOut}
+                      to="/"
+                      className="text-base sm:text-lg font-medium text-blue-500 hover:text-blue-600 transition-colors duration-200"
+                    >
+                      Logout
+                    </Link>
+                  </li>
+                </>
               ) : (
                 <>
                   <li>

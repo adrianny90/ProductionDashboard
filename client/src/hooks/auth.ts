@@ -80,7 +80,6 @@ export const me = async () => {
 
   if (!res.ok) {
     const errorData = await res.json();
-    // console.error("Fetch error:", errorData, res.status, res.statusText);
     throw new Error(errorData.error || "An error occurred while signing in");
   }
   const data = await res.json();

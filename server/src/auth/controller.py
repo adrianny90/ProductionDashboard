@@ -6,6 +6,10 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import jwt, JWTError
+from ..database.core import DbSession
+from ..database import entities
+import json
+from sqlalchemy.orm import Session
 
 
 load_dotenv(os.path.join(os.path.dirname(__file__), ".." ".env"))
@@ -59,7 +63,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 #         raise credentials_exception
 
 
-def verify_jwt_token(request: Request):
+def verify_jwt_token(request: Request, db: DbSession):
     token = request.cookies.get("access_token")
     # print("token",token)
     if not token:
@@ -70,7 +74,21 @@ def verify_jwt_token(request: Request):
         userid: str | None = payload.get("sub")
         if userid is None:
             raise HTTPException(status_code=401, detail="invalid token")
-        # print("userID verify token",userid)
-        return userid
+
+        db_user = (
+            db.query(entities.Employee).filter(entities.Employee.id == userid).first()
+        )
+        if db_user is None:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        # print("db_user verify token",db_user)
+
+        data = {
+            "user_exists": True,
+            "firstName": db_user.firstName,
+            "role": db_user.role,
+        }
+
+        return data
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
