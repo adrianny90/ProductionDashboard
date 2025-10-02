@@ -3,7 +3,7 @@ from sqlalchemy.dialects.postgresql import UUID
 import uuid
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
-
+import json
 
 Base = declarative_base()
 
@@ -19,7 +19,14 @@ class Employee(Base):
     role = Column(String, nullable=False, default="user")
 
     def __repr__(self):
-        return f"<User(email={self.email}, first_name={self.firstName}, last_name={self.lastName})>"
+        data = {
+            "email": self.email,
+            "first_name": self.firstName,
+            "last_name": self.lastName,
+            "id": str(self.id),
+            "role": self.role,
+        }
+        return json.dumps(data)
 
 
 class LineChart(Base):

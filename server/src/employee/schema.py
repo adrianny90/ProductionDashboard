@@ -45,3 +45,5 @@ class TokenData(BaseModel):
 
 class MeResponse(BaseModel):
     user_exists: bool
+    firstName: str
+    role: str

@@ -4,7 +4,7 @@ from . import schema
 from ..database.core import DbSession
 from . import controller
 from ..auth.controller import verify_jwt_token
-
+from typing import Dict, Any
 
 router_user = APIRouter(prefix="/users", tags=["Employees"])
 
@@ -14,12 +14,16 @@ async def get_all(db: DbSession):
     return controller.get_user_all(db)
 
 
-@router_user.get(
-    "/me", dependencies=[Depends(verify_jwt_token)], response_model=schema.MeResponse
-)
-async def check_user_me(db: DbSession):
+@router_user.get("/me", response_model=schema.MeResponse)
+async def check_user_me(
+    db: DbSession, user: Dict[str, Any] = Depends(verify_jwt_token)
+):
     # print("User ID verified:")
-    return {"user_exists": True}
+    return {
+        "user_exists": user["user_exists"],
+        "firstName": user["firstName"],
+        "role": user["role"],
+    }
 
 
 #  order with dynamic routes makes difference
