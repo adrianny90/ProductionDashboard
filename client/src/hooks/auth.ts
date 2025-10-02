@@ -38,7 +38,10 @@ export const signUp = async (formData: FormData) => {
 export const signIn = async (loginData: LoginData) => {
   const res = await fetch(`${baseURL}/signin`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    },
     body: JSON.stringify(loginData),
     credentials: "include",
   });
@@ -74,6 +77,7 @@ export const me = async () => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
     },
     credentials: "include",
   });
