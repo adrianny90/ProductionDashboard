@@ -46,7 +46,6 @@ async def add_data_line(db: DbSession, data: schema.LineChartCreate):
                 status_code=500, detail=f"Something wrong in loop wit error {str(e)}"
             )
     return f"Data added successfully"
-    # return controller.post_data_linechart(db, data)
 
 
 @router_charts.get("/bar", dependencies=[Depends(verify_jwt_token)])

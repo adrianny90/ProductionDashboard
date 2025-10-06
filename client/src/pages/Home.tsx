@@ -1,4 +1,32 @@
+import { useAuth } from "../hooks/useAuth";
+import { signIn } from "../hooks/auth";
 const Home = () => {
+  const { user, setUser } = useAuth();
+  const handleGuest = async () => {
+    const data = {
+      email: "guest@guest.de",
+      password: "qweqwe",
+    };
+    const res = await signIn(data);
+    setUser({
+      firstName: res.userName,
+      user_exists: res.user_exists,
+      role: res.userRole,
+    });
+  };
+  const handleAdmin = async () => {
+    const data = {
+      email: "admin@example.de",
+      password: "123123",
+    };
+    const res = await signIn(data);
+    setUser({
+      firstName: res.userName,
+      user_exists: res.user_exists,
+      role: res.userRole,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 font-sans flex items-center justify-center p-4 sm:p-6 md:p-8">
       <section className="w-full max-w-4xl bg-white rounded-lg shadow-md p-6 sm:p-8">
@@ -52,6 +80,24 @@ const Home = () => {
             </ul>
           </div>
         </div>
+        {user.firstName !== "" ? (
+          <></>
+        ) : (
+          <div className="flex justify-center gap-15 ">
+            <button
+              onClick={handleAdmin}
+              className="p-5 bg-blue-500 text-white  rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:bg-blue-300 transition-colors duration-200"
+            >
+              Admin login
+            </button>
+            <button
+              onClick={handleGuest}
+              className="p-5 bg-blue-500 text-white  rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:bg-blue-300 transition-colors duration-200"
+            >
+              Guest login
+            </button>
+          </div>
+        )}
       </section>
     </div>
   );

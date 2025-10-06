@@ -1,15 +1,15 @@
 from uuid import UUID, uuid4
 from sqlalchemy.orm import Session
 from ..database import entities
-from fastapi import HTTPException, Response, Request
+from fastapi import HTTPException, Response
 from . import schema
 from passlib.context import CryptContext
 import logging
-from datetime import timedelta
 from ..auth.controller import create_access_token
 from dotenv import load_dotenv
 import os
 from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy import update
 
 
 load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
@@ -62,7 +62,7 @@ def add_user(db: Session, user: schema.RegisterUserRequest) -> str:
             logger.error(error_message)
             raise HTTPException(status_code=401, detail=error_message)
         create_user = entities.Employee(
-            id=uuid4(),
+            id=str(uuid4()),
             email=user.email,
             firstName=user.firstName,
             lastName=user.lastName,
@@ -85,7 +85,7 @@ def signin_user(db: Session, user: schema.CheckUserRequest, response: Response) 
             .filter(entities.Employee.email == user.email)
             .first()
         )
-        # print("user!!", db_user)
+
         if not db_user:
             error_message = f"User with such email doesn't exist"
             logger.error(error_message)
@@ -102,7 +102,6 @@ def signin_user(db: Session, user: schema.CheckUserRequest, response: Response) 
             raise HTTPException(status_code=401, detail=error_message)
 
         is_production = PYTHON_ENV == "production"
-        # access_token_expires = timedelta(minutes=2)
         access_token = create_access_token(data={"sub": str(db_user.id)})
         response.set_cookie(
             key="access_token",
@@ -113,8 +112,6 @@ def signin_user(db: Session, user: schema.CheckUserRequest, response: Response) 
             samesite="none",
             max_age=30000,
         )
-        # print("user",db_user)
-        # return {"access_token": access_token, "token_type": "bearer"}
         return {
             "message": "Login successful",
             "userName": db_user.firstName,
@@ -138,3 +135,25 @@ def loggingout_user(response: Response) -> dict:
         samesite="none",
     )
     return {"message": "Logout successfuly"}
+
+
+def editting_user_by_id(db: Session, user_id: str, user: schema.UpdateUserRequest):
+    print(user_id)
+    if str(user_id) != user.id:
+        raise HTTPException(status_code=400, detail="ID in payload does not match URL")
+    result = db.execute(
+        update(entities.Employee)
+        .where(entities.Employee.id == user_id)
+        .values(
+            email=str(user.email),
+            firstName=user.firstName,
+            lastName=user.lastName,
+        )
+    )
+    db.commit()
+    if result.rowcount == 0:
+        raise HTTPException(status_code=404, detail="Could not find a user")
+    db_user = (
+        db.query(entities.Employee).filter(entities.Employee.id == user_id).first()
+    )
+    return db_user

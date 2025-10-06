@@ -18,7 +18,6 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     const getUser = async () => {
       try {
         const userData = await me();
-        // console.log(userData, "userdata");
 
         if (userData.user_exists) {
           setUser(userData);
@@ -32,7 +31,7 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
     getUser();
   }, []);
-  // console.log("User", user);
+
   const logOut = async () => {
     try {
       await signOut();
