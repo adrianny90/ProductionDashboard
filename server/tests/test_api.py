@@ -45,7 +45,7 @@ def test_read_root():
 
    
 
-def test_create_user():
+def test_signup_user():
     try:
         setup()
         response = client.post("/users/signup", json={"email":"example@se.de", "firstName":"John", "lastName":"Zink", "password":"123qwe"})
@@ -58,7 +58,7 @@ def test_create_user():
 
 
 
-def test_check_user():
+def test_signin_user():
     try:
         setup()
         response = client.post("/users/signin", json={"email":"example@example.de", "password":"123123"})
@@ -69,3 +69,11 @@ def test_check_user():
         assert data["userRole"]=="user"
     finally:
         teardown()
+
+
+
+def test_logout_user():     
+    response = client.delete("/users/signout")
+    assert response.status_code==200, response.text
+    data = response.json()       
+    assert data["message"] == "Logout successfuly"      
