@@ -1,30 +1,45 @@
 import { useAuth } from "../hooks/useAuth";
 import { signIn } from "../hooks/auth";
+import { useState } from "react";
 const Home = () => {
   const { user, setUser } = useAuth();
+  const [sending, setSending] = useState<Boolean>(false);
+
   const handleGuest = async () => {
-    const data = {
-      email: "guest@guest.de",
-      password: "qweqwe",
-    };
-    const res = await signIn(data);
-    setUser({
-      firstName: res.userName,
-      user_exists: res.user_exists,
-      role: res.userRole,
-    });
+    try {
+      setSending(true);
+      const data = {
+        email: "guest@guest.de",
+        password: "qweqwe",
+      };
+      const res = await signIn(data);
+      setUser({
+        firstName: res.userName,
+        user_exists: res.user_exists,
+        role: res.userRole,
+      });
+    } catch (error) {
+    } finally {
+      setSending(false);
+    }
   };
   const handleAdmin = async () => {
-    const data = {
-      email: "admin@example.de",
-      password: "123123",
-    };
-    const res = await signIn(data);
-    setUser({
-      firstName: res.userName,
-      user_exists: res.user_exists,
-      role: res.userRole,
-    });
+    try {
+      setSending(true);
+      const data = {
+        email: "admin@example.de",
+        password: "123123",
+      };
+      const res = await signIn(data);
+      setUser({
+        firstName: res.userName,
+        user_exists: res.user_exists,
+        role: res.userRole,
+      });
+    } catch (error) {
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -88,13 +103,13 @@ const Home = () => {
               onClick={handleAdmin}
               className="p-5 bg-blue-500 text-white  rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:bg-blue-300 transition-colors duration-200"
             >
-              Admin login
+              {sending ? "Logging..." : "Admin login"}
             </button>
             <button
               onClick={handleGuest}
               className="p-5 bg-blue-500 text-white  rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:bg-blue-300 transition-colors duration-200"
             >
-              Guest login
+              {sending ? "Logging..." : "Guest login"}
             </button>
           </div>
         )}
