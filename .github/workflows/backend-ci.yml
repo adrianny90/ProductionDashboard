@@ -31,6 +31,8 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           PYTHON_ENV: ${{ secrets.PYTHON_ENV }}
+          SECRET_KEY: ${{secrets.SECRET_KEY}}
+          ALGORITHM: ${{secrets.ALGORITHM}}
   deploy:
     runs-on: ubuntu-latest
     permissions:
