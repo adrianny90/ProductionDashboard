@@ -1,9 +1,9 @@
 from fastapi.testclient import TestClient
 from ..src.main import app
-from sqlalchemy import create_engine,StaticPool
+from sqlalchemy import create_engine, StaticPool
 from sqlalchemy.orm import sessionmaker
-from ..src.database.core import get_db,DbSession,Base
-
+from ..src.database.core import get_db, Base
+from ..src.database.entities import Employee
 
 
 DATABASE_URL= "sqlite:///:memory:"
@@ -28,7 +28,11 @@ app.dependency_overrides[get_db] = override_get_db
 
 def setup() -> None:
     Base.metadata.create_all(bind=engine)
-
+    session = TestingSessionLocal()
+    db_user = Employee(firstName="Mark",email="example@example.de", lastName="Duckan", password_hash="$2b$12$Ao2RuLoyLT2XJTq/AULyg.GsfsD2UKKRQZVovoPCichISUtnf4Ea6")
+    session.add(db_user)
+    session.commit()
+    session.close()
 
 def teardown() -> None:
     Base.metadata.drop_all(bind=engine)
@@ -52,3 +56,16 @@ def test_create_user():
     finally:
         teardown()
 
+
+
+def test_check_user():
+    try:
+        setup()
+        response = client.post("/users/signin", json={"email":"example@example.de", "password":"123123"})
+        assert response.status_code==200, response.text
+        data = response.json()       
+        assert data["message"] == "Login successful"
+        assert data["user_exists"]== True
+        assert data["userRole"]=="user"
+    finally:
+        teardown()
