@@ -3,7 +3,7 @@ import { signIn } from "../hooks/auth";
 import { useState } from "react";
 const Home = () => {
   const { user, setUser } = useAuth();
-  const [sending, setSending] = useState<Boolean>(false);
+  const [sending, setSending] = useState<boolean>(false);
 
   const handleGuest = async () => {
     try {
@@ -19,6 +19,7 @@ const Home = () => {
         role: res.userRole,
       });
     } catch (error) {
+      console.error("Error while signing in.", error);
     } finally {
       setSending(false);
     }
@@ -37,6 +38,7 @@ const Home = () => {
         role: res.userRole,
       });
     } catch (error) {
+      console.error("Error while signing in.", error);
     } finally {
       setSending(false);
     }
