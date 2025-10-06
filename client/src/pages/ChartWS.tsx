@@ -31,7 +31,6 @@ class ChartWS extends React.Component {
 
     this.setState({
       ws: ws,
-      // Create an interval to send echo messages to the server
       interval: setInterval(() => ws.send("echo"), 1000),
     });
   }
@@ -50,7 +49,6 @@ class ChartWS extends React.Component {
     const recv = JSON.parse(ev.data);
     const { data, count } = this.state;
     let newData = [...data];
-    // Remove first data if we received more than 20 values
     if (count > 20) {
       newData = newData.slice(1);
     }

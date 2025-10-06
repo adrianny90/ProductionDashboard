@@ -1,5 +1,4 @@
-from fastapi import APIRouter, Response, Depends, Request
-from uuid import UUID
+from fastapi import APIRouter, Response, Depends
 from . import schema
 from ..database.core import DbSession
 from . import controller
@@ -18,7 +17,7 @@ async def get_all(db: DbSession):
 async def check_user_me(
     db: DbSession, user: Dict[str, Any] = Depends(verify_jwt_token)
 ):
-    # print("User ID verified:")
+
     return {
         "user_exists": user["user_exists"],
         "firstName": user["firstName"],
@@ -29,9 +28,9 @@ async def check_user_me(
 #  order with dynamic routes makes difference
 
 
-@router_user.get("/{user_id}", response_model=schema.UserResponse)
-async def get_user_by_id(user_id: UUID, db: DbSession):
-    return controller.get_user_by_id(db, user_id)
+# @router_user.get("/{user_id}", response_model=schema.UserResponse)
+# async def get_user_by_id(user_id: UUID, db: DbSession):
+#     return controller.get_user_by_id(db, user_id)
 
 
 @router_user.post("/signup", response_model=str)
@@ -49,6 +48,6 @@ async def logout_user(response: Response):
     return controller.loggingout_user(response)
 
 
-# @router_user.post("/verify-token/{token}")
-# async def verify_token(token: str):
-#     return verify_jwt_token(token=token)
+@router_user.put("/{user_id}")
+async def edit_user_by_id(user_id: str, db: DbSession, user: schema.UpdateUserRequest):
+    return controller.editting_user_by_id(db, user_id, user)

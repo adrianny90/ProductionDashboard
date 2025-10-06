@@ -11,7 +11,7 @@ Base = declarative_base()
 class Employee(Base):
     __tablename__ = "employees"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4))
     email = Column(String, nullable=False, unique=True)
     firstName = Column(String, nullable=False)
     lastName = Column(String, nullable=False)

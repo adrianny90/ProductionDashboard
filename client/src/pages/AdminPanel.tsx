@@ -14,10 +14,10 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { getUsers } from "../hooks/useData";
+import { getUsers, updateUsers } from "../hooks/useData";
 
 interface User {
-  id: number;
+  id: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -26,63 +26,64 @@ interface User {
 
 const AdminPanel = () => {
   const [users, setUsers] = useState<User[] | undefined>();
-
-  const [editingId, setEditingId] = useState<number | null>(null);
-
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [editUser, setEditUser] = useState<User | null>(null);
+
   useEffect(() => {
     const getData = async () => {
       const allUsers = await getUsers();
-      //   console.log("all", allUsers);
       setUsers(allUsers);
     };
     getData();
   }, []);
-  // Start editing a user
+
   const handleEdit = (user: User) => {
     setEditingId(user.id);
     setEditUser({ ...user });
   };
 
-  // Save edited user
-  const handleSave = (id: number) => {
+  const handleSave = async (id: string) => {
     if (editUser) {
+      const payload: User = {
+        email: editUser.email,
+        firstName: editUser.firstName,
+        lastName: editUser.lastName,
+        id: editUser.id,
+        role: editUser.role,
+      };
+      console.log("payload", payload);
+
       setUsers(users?.map((user) => (user.id === id ? editUser : user)));
-      // TODO: Call API to save changes to the backend
-      // Example: await updateUser(editUser);
+      await updateUsers(id, payload);
       setEditingId(null);
       setEditUser(null);
     }
   };
 
-  // Cancel editing
   const handleCancel = () => {
     setEditingId(null);
     setEditUser(null);
   };
 
-  // Handle input changes for editable fields
   const handleInputChange = (field: keyof User, value: string) => {
     if (editUser) {
       setEditUser({ ...editUser, [field]: value });
     }
   };
 
-  // Handle Reset Password button click
-  const handleResetPassword = (userId: number) => {
-    // TODO: Implement reset password logic (e.g., API call)
-    console.log(`Reset password for user ID: ${userId}`);
-    // Example: await resetPassword(userId);
+  const handleResetPassword = (userName: string) => {
+    window.alert(`Email, to user: ${userName}, with reset link is sent.`);
   };
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1>Admin Panel - User Management</h1>
+      <h1 className="text-3xl font-bold text-center py-14 text-blue-500">
+        Admin Panel - User Management
+      </h1>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>First Name</TableCell>
               <TableCell>Last Name</TableCell>
@@ -93,7 +94,6 @@ const AdminPanel = () => {
           <TableBody>
             {users?.map((user) => (
               <TableRow key={user.id}>
-                <TableCell>{user.id}</TableCell>
                 <TableCell>
                   {editingId === user.id ? (
                     <TextField
@@ -170,7 +170,7 @@ const AdminPanel = () => {
                       <Button
                         variant="outlined"
                         color="secondary"
-                        onClick={() => handleResetPassword(user.id)}
+                        onClick={() => handleResetPassword(user.firstName)}
                         style={{ marginLeft: "10px" }}
                       >
                         Reset Password

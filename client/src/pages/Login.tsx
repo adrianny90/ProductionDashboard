@@ -37,7 +37,6 @@ const Login = () => {
         user_exists: res.user_exists,
         role: res.userRole,
       });
-      // console.log("set user", res.user_id);
       actions.resetForm();
       navigate("/");
     },

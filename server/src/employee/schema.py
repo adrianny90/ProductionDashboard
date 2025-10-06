@@ -24,23 +24,17 @@ class RegisterUserRequest(BaseModel):
     password: str
 
 
+class UpdateUserRequest(BaseModel):
+    email: str
+    firstName: str
+    lastName: str
+    id: str
+    role: str
+
+
 class CheckUserRequest(BaseModel):
     email: EmailStr
     password: str
-
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-
-class TokenData(BaseModel):
-    user_id: str | None = None
-
-    def get_uuid(self) -> UUID | None:
-        if self.user_id:
-            return UUID(self.user_id)
-        return None
 
 
 class MeResponse(BaseModel):

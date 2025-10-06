@@ -25,7 +25,6 @@ function App() {
               <Route path="/ws" element={<ChartWS />} />
               <Route path="admin/panel" element={<AdminPanel />} />
             </Route>
-            {/* <Route path="/user" element={<User />} /> */}
             <Route path="/calendar" element={<Calendar />} />
           </Route>
         </Routes>

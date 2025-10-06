@@ -4,6 +4,7 @@ from sqlalchemy import create_engine, StaticPool
 from sqlalchemy.orm import sessionmaker
 from ..src.database.core import get_db, Base
 from ..src.database.entities import Employee
+import uuid
 
 
 DATABASE_URL = "sqlite:///:memory:"
@@ -27,6 +28,8 @@ def override_get_db():
 
 app.dependency_overrides[get_db] = override_get_db
 
+TEST_USER_ID = str(uuid.uuid4())
+
 
 def setup() -> None:
     Base.metadata.create_all(bind=engine)
@@ -36,6 +39,7 @@ def setup() -> None:
         email="example@example.de",
         lastName="Duckan",
         password_hash="$2b$12$Ao2RuLoyLT2XJTq/AULyg.GsfsD2UKKRQZVovoPCichISUtnf4Ea6",
+        id=TEST_USER_ID,
     )
     session.add(db_user)
     session.commit()
@@ -92,3 +96,27 @@ def test_logout_user():
     assert response.status_code == 200, response.text
     data = response.json()
     assert data["message"] == "Logout successfuly"
+
+
+def test_edit_user():
+    try:
+        setup()
+
+        response = client.put(
+            f"/users/{TEST_USER_ID}",
+            json={
+                "email": "newexample@example.de",
+                "firstName": "NewName",
+                "lastName": "NewLastName",
+                "id": TEST_USER_ID,
+                "role": "user",
+            },
+        )
+        assert response.status_code == 200, response.text
+        data = response.json()
+        assert data["firstName"] == "NewName"
+        assert data["lastName"] == "NewLastName"
+        assert data["email"] == "newexample@example.de"
+        assert data["id"] == TEST_USER_ID
+    finally:
+        teardown()

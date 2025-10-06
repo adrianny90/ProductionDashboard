@@ -18,11 +18,6 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
-    # allow_origins=[
-    #     # "http://localhost:8080",
-    #     # "http://localhost:5173",
-    #     "https://productiondashboardclient.onrender.com",
-    # ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

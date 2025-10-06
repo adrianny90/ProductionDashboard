@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from ..database import entities
-from uuid import UUID, uuid4
+from uuid import uuid4
 from . import schema
 import logging
 
