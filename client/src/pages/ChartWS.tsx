@@ -58,9 +58,9 @@ class ChartWS extends React.Component {
 
   render() {
     return (
-      <div className="min-h-screen bg-gray-100 font-sans flex items-center justify-center p-4 sm:p-6 md:p-8">
-        <div className="w-full max-w-4xl bg-white rounded-lg shadow-md p-6 sm:p-8">
-          <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
+      <div className="min-h-fit bg-black bg-gradient-to-r from-black via-purple-950 to-black  font-sans flex items-center justify-center p-4 sm:p-6 md:p-8">
+        <div className="w-full max-w-4xl bg-black rounded-lg shadow-md p-6 sm:p-8">
+          <h1 className="text-2xl font-bold text-center text-white mb-6">
             Real time production capacity
           </h1>
           <ResponsiveContainer width="100%" height={400}>

@@ -29,7 +29,7 @@ export default class DemoApp extends React.Component<
   render() {
     return (
       <>
-        <div className="flex flex-col md:flex-row min-h-full  ">
+        <div className="flex flex-col md:flex-row min-h-fit w-fit items-center  bg-gradient-to-r from-black via-[#035338] to-[#035338]  ">
           {this.renderSidebar()}
 
           <div className="p-3">
@@ -60,16 +60,18 @@ export default class DemoApp extends React.Component<
 
   renderSidebar() {
     return (
-      <div className="  bg-gray-100 ">
+      <div className="bg-black min-h-full">
         <div className="p-2">
-          <h2 className="text text-2xl my-2">Instructions</h2>
+          <h2 className="text-white text-2xl my-2">Instructions</h2>
           <ul>
-            <li>Select dates and you will be prompted to create a new event</li>
-            <li>Click an event to delete it</li>
+            <li className="text-white">
+              Select dates and you will be prompted to create a new event
+            </li>
+            <li className="text-white">Click an event to delete it</li>
           </ul>
         </div>
         <div className="mx-3">
-          <label>
+          <label className="text-white">
             <input
               type="checkbox"
               checked={this.state.weekendsVisible}
@@ -78,7 +80,7 @@ export default class DemoApp extends React.Component<
             toggle weekends
           </label>
         </div>
-        <div className="p-2">
+        <div className="p-2 text-white">
           <h2>All Events ({this.state.currentEvents.length})</h2>
           <ul>{this.state.currentEvents.map(renderSidebarEvent)}</ul>
         </div>

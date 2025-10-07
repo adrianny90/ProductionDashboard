@@ -12,14 +12,13 @@ import AdminPanel from "./pages/AdminPanel";
 
 function App() {
   return (
-    <div className=" ">
+    <div className="bg-black">
       <AuthContextProvider>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="/signin" element={<Login />} />
             <Route path="/signup" element={<Register />} />
-
             <Route element={<ProtectedLayout />}>
               <Route path="/charts/:chartType" element={<Charts />} />
               <Route path="/ws" element={<ChartWS />} />
