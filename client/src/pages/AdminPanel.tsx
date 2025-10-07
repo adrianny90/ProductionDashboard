@@ -75,25 +75,25 @@ const AdminPanel = () => {
   };
 
   return (
-    <div className="p-10">
+    <div className="p-10 ">
       <h1 className="text-3xl font-bold text-center py-14 text-purple-600">
         Admin Panel - User Management
       </h1>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ backgroundColor: "black" }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Email</TableCell>
-              <TableCell>First Name</TableCell>
-              <TableCell>Last Name</TableCell>
-              <TableCell>Role</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell sx={{ color: "white" }}>Email</TableCell>
+              <TableCell sx={{ color: "white" }}>First Name</TableCell>
+              <TableCell sx={{ color: "white" }}>Last Name</TableCell>
+              <TableCell sx={{ color: "white" }}>Role</TableCell>
+              <TableCell sx={{ color: "white" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {users?.map((user) => (
               <TableRow key={user.id}>
-                <TableCell>
+                <TableCell sx={{ color: "white" }}>
                   {editingId === user.id ? (
                     <TextField
                       value={editUser?.email || ""}
@@ -101,12 +101,20 @@ const AdminPanel = () => {
                         handleInputChange("email", e.target.value)
                       }
                       size="small"
+                      sx={{
+                        color: "white", // Kolor tekstu ogólny
+                        "& .MuiInputLabel-root": { color: "grey.300" }, // Kolor labela
+                        "& .MuiOutlinedInput-input": { color: "white" }, // Kolor tekstu w polu
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": { borderColor: "grey.500" }, // Opcjonalnie: obramowanie
+                        },
+                      }}
                     />
                   ) : (
                     user.email
                   )}
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ color: "white" }}>
                   {editingId === user.id ? (
                     <TextField
                       value={editUser?.firstName || ""}
@@ -114,12 +122,21 @@ const AdminPanel = () => {
                         handleInputChange("firstName", e.target.value)
                       }
                       size="small"
+                      // colors below are added becuase by default they are black, but bg-color is already black, it is done according to what was checked in internet
+                      sx={{
+                        color: "white",
+                        "& .MuiInputLabel-root": { color: "grey.300" },
+                        "& .MuiOutlinedInput-input": { color: "white" },
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": { borderColor: "grey.500" },
+                        },
+                      }}
                     />
                   ) : (
                     user.firstName
                   )}
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ color: "white" }}>
                   {editingId === user.id ? (
                     <TextField
                       value={editUser?.lastName || ""}
@@ -127,12 +144,20 @@ const AdminPanel = () => {
                         handleInputChange("lastName", e.target.value)
                       }
                       size="small"
+                      sx={{
+                        color: "white",
+                        "& .MuiInputLabel-root": { color: "grey.300" },
+                        "& .MuiOutlinedInput-input": { color: "white" },
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": { borderColor: "grey.500" },
+                        },
+                      }}
                     />
                   ) : (
                     user.lastName
                   )}
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ color: "white" }}>
                   {editingId === user.id ? (
                     <TextField
                       value={editUser?.role || ""}
@@ -140,12 +165,20 @@ const AdminPanel = () => {
                         handleInputChange("role", e.target.value)
                       }
                       size="small"
+                      sx={{
+                        color: "white",
+                        "& .MuiInputLabel-root": { color: "grey.300" },
+                        "& .MuiOutlinedInput-input": { color: "white" },
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": { borderColor: "grey.500" },
+                        },
+                      }}
                     />
                   ) : (
                     user.role
                   )}
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ color: "white" }}>
                   {editingId === user.id ? (
                     <>
                       <IconButton

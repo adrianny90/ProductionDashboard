@@ -46,14 +46,14 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-black  bg-[linear-gradient(to_bottom_right,#10b981_0%,#000_25%,#000_100%)] font-sans flex items-center justify-center p-4 sm:p-6 md:p-8">
-      <section className="w-full max-w-4xl bg-black bg-[radial-gradient(circle_at_center,#10b981_0%,#000_05%,#000_100%)] rounded-lg shadow-md p-6 sm:p-8">
+      <section className="w-full max-w-4xl  bg-[radial-gradient(circle_at_center,#10b981_0%,#000_15%,#000_100%)] rounded-lg shadow-md p-6 sm:p-8">
         <h1 className="text-3xl sm:text-4xl font-bold text-center text-purple-600 mb-6">
           Welcome to the Production Dashboard!
         </h1>
         <h2 className="text-xl sm:text-2xl font-semibold text-purple-600 mb-3">
           Project Purpose
         </h2>
-        <p className="text-gray-600  mb-6">
+        <p className="text-white  mb-6">
           The Production Dashboard is a modern web application designed for
           real-time visualization and analysis of production data. Our goal is
           to provide an intuitive and responsive tool that enables monitoring of
@@ -66,7 +66,7 @@ const Home = () => {
         <h2 className="text-xl sm:text-2xl font-semibold text-purple-600 mb-3">
           Technologies
         </h2>
-        <div className="text-gray-600 ">
+        <div className="text-white ">
           The Production Dashboard is built using a modern technology stack,
           ensuring speed, scalability, and maintainability:
           <div className="mt-3">
@@ -97,8 +97,8 @@ const Home = () => {
             </ul>
           </div>
           <svg
-            width="368"
-            height="385"
+            width="200"
+            height="200"
             viewBox="0 0 368 385"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
