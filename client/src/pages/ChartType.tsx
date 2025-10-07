@@ -95,7 +95,7 @@ const ChartType = () => {
 
   if (!fetchData) {
     return (
-      <div className="min-h-screen bg-gray-100 font-sans flex items-center justify-center text-gray-700 text-lg">
+      <div className="min-h-screen bg-black font-sans flex items-center justify-center text-white text-lg">
         Waiting for data...
       </div>
     );
@@ -281,9 +281,7 @@ const ChartType = () => {
           chartType !== "line" &&
           chartType !== "pie" &&
           chartType !== "mixBar" && (
-            <div className="text-center text-gray-700 text-lg">
-              Unknown Chart
-            </div>
+            <div className="text-center text-white text-lg">Unknown Chart</div>
           )}
       </div>
     </div>
