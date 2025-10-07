@@ -51,7 +51,6 @@ const AdminPanel = () => {
         id: editUser.id,
         role: editUser.role,
       };
-      console.log("payload", payload);
 
       setUsers(users?.map((user) => (user.id === id ? editUser : user)));
       await updateUsers(id, payload);
@@ -76,8 +75,8 @@ const AdminPanel = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1 className="text-3xl font-bold text-center py-14 text-blue-500">
+    <div className="p-10">
+      <h1 className="text-3xl font-bold text-center py-14 text-purple-600">
         Admin Panel - User Management
       </h1>
       <TableContainer component={Paper}>

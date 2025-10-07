@@ -45,12 +45,12 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 font-sans flex items-center justify-center p-4 sm:p-6 md:p-8">
-      <section className="w-full max-w-4xl bg-white rounded-lg shadow-md p-6 sm:p-8">
-        <h1 className="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-6">
+    <div className="min-h-screen bg-black  bg-[linear-gradient(to_bottom_right,#10b981_0%,#000_25%,#000_100%)] font-sans flex items-center justify-center p-4 sm:p-6 md:p-8">
+      <section className="w-full max-w-4xl bg-black bg-[radial-gradient(circle_at_center,#10b981_0%,#000_05%,#000_100%)] rounded-lg shadow-md p-6 sm:p-8">
+        <h1 className="text-3xl sm:text-4xl font-bold text-center text-purple-600 mb-6">
           Welcome to the Production Dashboard!
         </h1>
-        <h2 className="text-xl sm:text-2xl font-semibold text-gray-700 mb-3">
+        <h2 className="text-xl sm:text-2xl font-semibold text-purple-600 mb-3">
           Project Purpose
         </h2>
         <p className="text-gray-600  mb-6">
@@ -63,14 +63,14 @@ const Home = () => {
           offers easy access to data, flexible presentation options, and high
           performance.
         </p>
-        <h2 className="text-xl sm:text-2xl font-semibold text-gray-700 mb-3">
+        <h2 className="text-xl sm:text-2xl font-semibold text-purple-600 mb-3">
           Technologies
         </h2>
         <div className="text-gray-600 ">
           The Production Dashboard is built using a modern technology stack,
           ensuring speed, scalability, and maintainability:
           <div className="mt-3">
-            <strong className="text-gray-800">Frontend:</strong>
+            <strong className="text-purple-600">Frontend:</strong>
             <ul className="list-disc pl-5 mt-2 space-y-2">
               <li>
                 TypeScript and React – for a secure, component-based, and
@@ -87,7 +87,7 @@ const Home = () => {
             </ul>
           </div>
           <div className="mt-3">
-            <strong className="text-gray-800">Backend:</strong>
+            <strong className="text-purple-600">Backend:</strong>
             <ul className="list-disc pl-5 mt-2 space-y-2">
               <li>
                 FastAPI – a modern Python framework delivering high performance,
@@ -96,6 +96,40 @@ const Home = () => {
               </li>
             </ul>
           </div>
+          <svg
+            width="368"
+            height="385"
+            viewBox="0 0 368 385"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g opacity="0.5" filter="url(#filter0_f_25_1772)">
+              <circle cx="175.5" cy="192.5" r="107.5" fill="#00C778"></circle>
+            </g>
+            <defs>
+              <filter
+                id="filter0_f_25_1772"
+                x="-17"
+                y="0"
+                width="385"
+                height="385"
+                filterUnits="userSpaceOnUse"
+                colorInterpolationFilters="sRGB"
+              >
+                <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
+                <feBlend
+                  mode="normal"
+                  in="SourceGraphic"
+                  in2="BackgroundImageFix"
+                  result="shape"
+                ></feBlend>
+                <feGaussianBlur
+                  stdDeviation="42.5"
+                  result="effect1_foregroundBlur_25_1772"
+                ></feGaussianBlur>
+              </filter>
+            </defs>
+          </svg>
         </div>
         {user.firstName !== "" ? (
           <></>
@@ -103,13 +137,13 @@ const Home = () => {
           <div className="flex justify-center gap-15 ">
             <button
               onClick={handleAdmin}
-              className="p-5 bg-blue-500 text-white  rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:bg-blue-300 transition-colors duration-200"
+              className="p-5 bg-[#035338] text-white  rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:bg-blue-300 transition-colors duration-200"
             >
               {sending ? "Logging..." : "Admin login"}
             </button>
             <button
               onClick={handleGuest}
-              className="p-5 bg-blue-500 text-white  rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:bg-blue-300 transition-colors duration-200"
+              className="p-5 bg-[#035338] text-white  rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:bg-blue-300 transition-colors duration-200"
             >
               {sending ? "Logging..." : "Guest login"}
             </button>

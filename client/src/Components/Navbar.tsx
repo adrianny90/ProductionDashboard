@@ -5,14 +5,14 @@ const Navbar = () => {
   const { user, logOut } = useAuth();
 
   return (
-    <nav className="bg-white shadow-md">
+    <nav className="bg-black ">
       <div className="container mx-auto px-4 sm:px-6 md:px-8 py-4 flex justify-between items-center">
         <div>
           <ul>
             <li>
               <Link
                 to="/"
-                className="text-xl sm:text-2xl font-semibold text-blue-500 hover:text-blue-600 transition-colors duration-200"
+                className="text-xl sm:text-2xl font-semibold text-purple-600 hover:text-blue-600 transition-colors duration-200"
               >
                 Home
               </Link>
@@ -24,14 +24,14 @@ const Navbar = () => {
             <>
               {user.user_exists ? (
                 <>
-                  <li className="text-base sm:text-lg font-medium text-red-500 hover:text-red-600 transition-colors duration-200">
+                  <li className="text-base sm:text-lg font-medium text-[#035338] hover:text-blue-600 transition-colors duration-200">
                     Hi {user.firstName}!
                   </li>
                   <li>
                     <Link
                       onClick={logOut}
                       to="/"
-                      className="text-base sm:text-lg font-medium text-blue-500 hover:text-blue-600 transition-colors duration-200"
+                      className="text-base sm:text-lg font-medium text-purple-600 hover:text-blue-600 transition-colors duration-200"
                     >
                       Logout
                     </Link>
@@ -42,7 +42,7 @@ const Navbar = () => {
                   <li>
                     <Link
                       to="/signin"
-                      className="text-base sm:text-lg font-medium text-blue-500 hover:text-blue-600 transition-colors duration-200"
+                      className="text-base sm:text-lg font-medium text-purple-600 hover:text-blue-600 transition-colors duration-200"
                     >
                       Login
                     </Link>
@@ -50,7 +50,7 @@ const Navbar = () => {
                   <li>
                     <Link
                       to="/signup"
-                      className="text-base sm:text-lg font-medium text-blue-500 hover:text-blue-600 transition-colors duration-200"
+                      className="text-base sm:text-lg font-medium text-purple-600 hover:text-blue-600 transition-colors duration-200"
                     >
                       Register
                     </Link>
