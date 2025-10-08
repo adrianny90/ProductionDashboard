@@ -1,8 +1,8 @@
-<span style="font-size: 34px;"> Production Dashboard </span>
+# Production Dashboard
 
 A modern web application for visualizing production data, featuring user authentication, interactive charts, and calendar integration. Built with React frontend and FastAPI backend, providing secure access to insights, scheduling, and user management.
 
-<span style="font-size: 24px;"> Features </span>
+## Features
 
 - User Authentication: JWT-based registration and login. Landing page with buttons for Guest (limited access) and Admin (full access) login.
 - Data Visualization: Interactive charts (bar, line, pie) for production metrics using Recharts.
@@ -10,20 +10,20 @@ A modern web application for visualizing production data, featuring user authent
 - Admin Panel: User management dashboard for Admins.
 - Responsive Design: Optimized for desktop and mobile.
 
-<span style="font-size: 24px;">Tech Stack </span>
+## Tech Stack
 
 - Frontend: React (TypeScript), Vite, Recharts, React Calendar.
 - Backend: FastAPI (Python), SQLAlchemy, JWT.
 - Database: PostgreSQL.
 - Other: Pytest, Uvicorn.
 
-<span style="font-size: 24px;"> Prerequisites </span>
+## Prerequisites
 
 - Node.js (v21+).
 - Python (3.12+).
 - Git.
 
-<span style="font-size: 24px;">Installation</span>
+## Installation
 
 Frontend
 
@@ -40,13 +40,13 @@ pip install -r requirements.txt
 uvicorn src.main:app --reload
 ```
 
-<span style="font-size: 24px;">Running the App </span>
+## Running the App
 
 - Start backend.
 - Start frontend.
 - Open http://localhost:5173, register/login via form or use Guest/Admin buttons.
 
-<span style="font-size: 24px;">Testing </span>
+## Testing
 
 - Backend
 
@@ -60,6 +60,7 @@ pytest
 npm run test
 ```
 
-<span style="font-size: 24px;"> Deployment </span>
+## Deployment
 
 Deployed on Render.
+Please visit: https://productiondashboardclient.onrender.com/
