@@ -4,6 +4,9 @@ import uuid
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 import json
+from sqlalchemy import MetaData
+from .core import engine
+
 
 Base = declarative_base()
 
@@ -17,6 +20,9 @@ class Employee(Base):
     lastName = Column(String, nullable=False)
     password_hash = Column(String)
     role = Column(String, nullable=False, default="user")
+
+    class Config:
+        from_attributes = True
 
     def __repr__(self):
         data = {
@@ -47,3 +53,6 @@ class BarChart(Base):
     lubricant = Column(Float, nullable=False)
     anti_corrosion_Coating = Column(Float, nullable=False)
     time_stamp = Column(TIMESTAMP, default=datetime.utcnow, index=True, nullable=False)
+
+
+metadata = MetaData()

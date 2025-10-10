@@ -13,7 +13,8 @@ router_charts = APIRouter(prefix="/charts", tags=["Charts-data"])
 
 @router_charts.get("/line", dependencies=[Depends(verify_jwt_token)])
 async def get_data_line(db: DbSession):
-    return controller.get_data_linechart(db)
+    result = await controller.get_data_linechart(db)
+    return result
 
 
 @router_charts.get("/line/one")
@@ -38,7 +39,7 @@ async def add_data_line(db: DbSession, data: schema.LineChartCreate):
                 pressure=fake_data["pressure"],
             )
             print(f"Created {_} rekord line")
-            controller.post_data_linechart(db, db_line_chart)
+            await controller.post_data_linechart(db, db_line_chart)
             await asyncio.sleep(10)
 
         except Exception as e:
@@ -50,7 +51,8 @@ async def add_data_line(db: DbSession, data: schema.LineChartCreate):
 
 @router_charts.get("/bar", dependencies=[Depends(verify_jwt_token)])
 async def get_data_bar(db: DbSession):
-    return controller.get_data_barchart(db)
+    result = await controller.get_data_barchart(db)
+    return result
 
 
 @router_charts.post("/bar")
@@ -66,7 +68,7 @@ async def add_data_bar(db: DbSession, data: schema.BarChartCreate):
 
         try:
 
-            controller.post_data_barchart(db, fake_data)
+            await controller.post_data_barchart(db, fake_data)
             print(f"Adding {_} time bar")
             await asyncio.sleep(10)
 
@@ -94,4 +96,5 @@ async def get_data_pie():
 
 @router_charts.get("/mixBar", dependencies=[Depends(verify_jwt_token)])
 async def get_data_mix_bar(db: DbSession):
-    return controller.get_data_barchart(db)
+    result = await controller.get_data_barchart(db)
+    return result

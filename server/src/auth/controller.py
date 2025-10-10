@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import HTTPException, Request
+from sqlalchemy import select
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from typing import Optional
@@ -32,17 +33,21 @@ bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=300)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    try:
+        to_encode = data.copy()
+        if expires_delta:
+            expire = datetime.utcnow() + expires_delta
+        else:
+            expire = datetime.utcnow() + timedelta(minutes=300)
+        to_encode.update({"exp": expire})
+        encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+        return encoded_jwt
+    except Exception as e:
+        error_message = f"Error while creating toke with: {str(e)}"
+        raise HTTPException(status_code=400, detail=error_message)
 
 
-def verify_jwt_token(request: Request, db: DbSession):
+async def verify_jwt_token(request: Request, db: DbSession):
     token = request.cookies.get("access_token")
     if not token:
         raise HTTPException(status_code=401, detail="Could not get a token")
@@ -52,10 +57,10 @@ def verify_jwt_token(request: Request, db: DbSession):
         userid: str | None = payload.get("sub")
         if userid is None:
             raise HTTPException(status_code=401, detail="invalid token")
-
-        db_user = (
-            db.query(entities.Employee).filter(entities.Employee.id == userid).first()
+        result = await db.execute(
+            select(entities.Employee).filter(entities.Employee.id == userid)
         )
+        db_user = result.scalar_one_or_none()
         if db_user is None:
             raise HTTPException(status_code=404, detail="User not found")
 

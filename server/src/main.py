@@ -6,6 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
 import random
+from contextlib import asynccontextmanager
+from .database.entities import Base, metadata
+from .database.core import engine
 
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 PORT = int(os.getenv("PORT", 8000))
@@ -14,7 +17,17 @@ ALLOWED_ORIGINS = os.getenv(
     "http://localhost:5173,http://localhost:8080,https://productiondashboardclient.onrender.com",
 ).split(",")
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    yield
+
+    await engine.dispose()
+
+
+app = FastAPI(lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
@@ -43,7 +56,7 @@ async def test_websocket(websocket: WebSocket):
 
 @app.get("/")
 def test():
-    return {"message: " " Hello, have a nice day!"}
+    return {"message": "Hello, have a nice day!"}
 
 
 @app.get("/debug")

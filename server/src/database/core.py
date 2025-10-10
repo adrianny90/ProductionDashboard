@@ -1,10 +1,9 @@
-from sqlalchemy import create_engine, MetaData
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 import os
 from dotenv import load_dotenv
-from sqlalchemy.orm import sessionmaker, Session
 from typing import Annotated
 from fastapi import Depends
-from .entities import Base
+
 
 load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
 
@@ -12,21 +11,17 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if DATABASE_URL is None:
     raise ValueError("Lack of DATABASE_URL")
 
-engine = create_engine(DATABASE_URL)
+engine = create_async_engine(DATABASE_URL, echo=False)
 
-SessionLocal = sessionmaker(autoflush=False, bind=engine, autocommit=False)
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+AsyncSessionLocal = async_sessionmaker(autoflush=False, bind=engine, autocommit=False)
 
 
-metadata = MetaData()
+async def get_db():
+    async with AsyncSessionLocal() as db:
+        try:
+            yield db
+        finally:
+            await db.aclose()
 
-Base.metadata.create_all(bind=engine)
 
-DbSession = Annotated[Session, Depends(get_db)]
+DbSession = Annotated[AsyncSession, Depends(get_db)]
