@@ -1,5 +1,5 @@
 from uuid import UUID, uuid4
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from ..database import entities
 from fastapi import HTTPException, Response
 from . import schema
@@ -9,7 +9,7 @@ from ..auth.controller import create_access_token
 from dotenv import load_dotenv
 import os
 from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy import update
+from sqlalchemy import update, select
 
 
 load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
@@ -33,29 +33,39 @@ def get_password_hash(password: str) -> str:
     return bcrypt_context.hash(password)
 
 
-def get_user_all(db: Session):
-    db_users = db.query(entities.Employee).all()
-    if not db_users:
-        raise HTTPException(status_code=401, detail="Could not find a user")
-    return db_users
-
-
-def get_user_by_id(db: Session, user_id: UUID):
-    db_user = (
-        db.query(entities.Employee).filter(entities.Employee.id == user_id).first()
-    )
-    if not db_user:
-        raise HTTPException(status_code=401, detail="Could not find a user")
-    return db_user
-
-
-def add_user(db: Session, user: schema.RegisterUserRequest) -> str:
+async def get_user_all(db: AsyncSession):
     try:
-        db_user = (
-            db.query(entities.Employee)
-            .filter(entities.Employee.email == user.email)
-            .first()
+        result = await db.execute(select(entities.Employee))
+        db_users = result.scalars().all()
+        if not db_users:
+            raise HTTPException(status_code=401, detail="Could not find a user")
+        return db_users
+    except Exception as e:
+        error_message = f"Error while fetching users with error: {str(e)}"
+        raise HTTPException(status_code=500, detail=error_message)
+
+
+async def get_user_by_id(db: AsyncSession, user_id: str):
+    try:
+        result = await db.execute(
+            select(entities.Employee).filter(entities.Employee.id == user_id)
         )
+        db_user = result.scalar_one_or_none()
+        if not db_user:
+            raise HTTPException(status_code=404, detail="Could not find a user")
+        return db_user
+    except Exception as e:
+        error_message = f"Error while fetching an user with error: {str(e)}"
+        logger.error(error_message)
+        raise HTTPException(status_code=500, detail=error_message)
+
+
+async def add_user(db: AsyncSession, user: schema.RegisterUserRequest) -> str:
+    try:
+        result = await db.execute(
+            select(entities.Employee).filter(entities.Employee.email == user.email)
+        )
+        db_user = result.scalar_one_or_none()
         print(db_user)
         if db_user:
             error_message = f"User with such email already exists"
@@ -69,39 +79,36 @@ def add_user(db: Session, user: schema.RegisterUserRequest) -> str:
             password_hash=get_password_hash(user.password),
         )
         db.add(create_user)
-        db.commit()
-        db.refresh(create_user)
+        await db.commit()
+        await db.refresh(create_user)
         return f"User with email {create_user.email} is created"
     except Exception as e:
-        error_message = f"error while creating an user with error: {str(e)}"
+        error_message = f"Error while creating an user with error: {str(e)}"
         logger.error(error_message)
         raise HTTPException(status_code=500, detail=error_message)
 
 
-def signin_user(db: Session, user: schema.CheckUserRequest, response: Response) -> dict:
+async def signin_user(
+    db: AsyncSession, user: schema.CheckUserRequest, response: Response
+) -> dict:
     try:
-        db_user = (
-            db.query(entities.Employee)
-            .filter(entities.Employee.email == user.email)
-            .first()
+        result = await db.execute(
+            select(entities.Employee).filter(entities.Employee.email == user.email)
         )
-
+        db_user = result.scalar_one_or_none()
         if not db_user:
             error_message = f"User with such email doesn't exist"
             logger.error(error_message)
-            raise HTTPException(status_code=401, detail=error_message)
+            raise HTTPException(status_code=404, detail=error_message)
         if db_user.password_hash is None:
             error_message = "User password hash is missing"
             logger.error(error_message)
             raise HTTPException(status_code=500, detail=error_message)
-
         password_hash = str(db_user.password_hash)
         if not bcrypt_context.verify(user.password, password_hash):
             error_message = f"Wrong credentials"
             logger.error(error_message)
             raise HTTPException(status_code=401, detail=error_message)
-
-        is_production = PYTHON_ENV == "production"
         access_token = create_access_token(data={"sub": str(db_user.id)})
         response.set_cookie(
             key="access_token",
@@ -125,7 +132,7 @@ def signin_user(db: Session, user: schema.CheckUserRequest, response: Response) 
         raise HTTPException(status_code=500, detail=error_message)
 
 
-def loggingout_user(response: Response) -> dict:
+def logout_user(response: Response) -> dict:
 
     response.delete_cookie(
         key="access_token",
@@ -134,26 +141,31 @@ def loggingout_user(response: Response) -> dict:
         # samesite="lax" if is_production else "none",
         samesite="none",
     )
-    return {"message": "Logout successfuly"}
+    return {"message": "Logout successfully"}
 
 
-def editting_user_by_id(db: Session, user_id: str, user: schema.UpdateUserRequest):
+async def editing_user_by_id(
+    db: AsyncSession, user_id: str, user: schema.UpdateUserRequest
+):
     print(user_id)
     if str(user_id) != user.id:
         raise HTTPException(status_code=400, detail="ID in payload does not match URL")
-    result = db.execute(
+    result = await db.execute(
         update(entities.Employee)
         .where(entities.Employee.id == user_id)
         .values(
-            email=str(user.email),
+            email=user.email,
             firstName=user.firstName,
             lastName=user.lastName,
         )
     )
-    db.commit()
+    await db.commit()
     if result.rowcount == 0:
         raise HTTPException(status_code=404, detail="Could not find a user")
-    db_user = (
-        db.query(entities.Employee).filter(entities.Employee.id == user_id).first()
+    find_user = await db.execute(
+        select(entities.Employee).filter(entities.Employee.id == user_id)
     )
+    db_user = find_user.scalar_one_or_none()
+    if not db_user:
+        raise HTTPException(status_code=500, detail="User not found in database")
     return db_user

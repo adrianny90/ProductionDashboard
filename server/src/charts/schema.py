@@ -8,7 +8,7 @@ class LineChartCreate(BaseModel):
     pressure: float
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class BarChartCreate(BaseModel):
@@ -17,4 +17,4 @@ class BarChartCreate(BaseModel):
     anti_corrosion_Coating: float
 
     class Config:
-        orm_mode = True
+        from_attributes = True

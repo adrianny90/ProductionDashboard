@@ -3,13 +3,13 @@ from uuid import UUID
 
 
 class UserResponse(BaseModel):
-    id: UUID
+    id: str
     firstName: str
     lastName: str
     email: str
 
     class Config:
-        from_attribites = True
+        from_attributes = True
 
 
 class UserCreate(UserResponse):
