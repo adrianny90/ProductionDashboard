@@ -1,18 +1,18 @@
 from sqlalchemy import Column, String, Float, TIMESTAMP
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
-from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 import json
 from sqlalchemy import MetaData
-from .core import engine
+from sqlalchemy.orm import DeclarativeBase
 
-
-Base = declarative_base()
+class Base(DeclarativeBase):
+    pass
 
 
 class Employee(Base):
-    __tablename__ = "employees"
+    __tablename__ = "employees"    
 
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4))
     email = Column(String, nullable=False, unique=True)
@@ -21,8 +21,7 @@ class Employee(Base):
     password_hash = Column(String)
     role = Column(String, nullable=False, default="user")
 
-    class Config:
-        from_attributes = True
+    
 
     def __repr__(self):
         data = {

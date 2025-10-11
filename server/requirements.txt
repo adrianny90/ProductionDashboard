@@ -18,3 +18,4 @@ python-jose
 httpx
 websockets
 asyncpg 
+aiosqlite
