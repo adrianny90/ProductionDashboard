@@ -19,3 +19,4 @@ httpx
 websockets
 asyncpg 
 aiosqlite
+pytest-asyncio
