@@ -46,7 +46,7 @@ async def test_websocket(websocket: WebSocket):
             # Wait for any message from the client
             await websocket.receive_text()
             # Send message to the client
-            resp = {"value": random.uniform(0, 4) + 83}
+            resp = {"value": f"{random.uniform(0, 4) + 83:,.2f}"}
             await websocket.send_json(resp)
         except Exception as e:
             print("error:", e)
